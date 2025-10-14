@@ -1,0 +1,27 @@
+<div
+  class="relative group cursor-pointer overflow-hidden rounded-xl shadow-lg
+         ring-2 ring-white/10 hover:ring-[#d1f43d] transition-all duration-300"
+  (click)="toggleMostrarTexto()"
+>
+  <img
+    [src]="imagen"
+    [alt]="nombre"
+    class="w-full h-56 object-cover object-center transition-all duration-500
+           group-hover:brightness-75 group-hover:scale-105"
+    [class.brightness-75]="mostrarTexto()"
+    [class.scale-105]="mostrarTexto()"
+  />
+
+  <div class="absolute inset-0 flex items-center justify-center p-4">
+    <span
+      class="text-white text-xl text-center font-black tracking-widest uppercase drop-shadow-2xl
+             transition-opacity duration-300 transform translate-y-2
+             group-hover:opacity-100 group-hover:translate-y-0"
+      [class.opacity-100]="mostrarTexto()"
+      [class.translate-y-0]="mostrarTexto()"
+      [class.opacity-0]="!mostrarTexto()"
+    >
+      {{ nombre }}
+    </span>
+  </div>
+</div>

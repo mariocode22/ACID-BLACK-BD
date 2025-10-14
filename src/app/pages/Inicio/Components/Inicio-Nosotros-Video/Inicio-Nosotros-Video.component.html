@@ -1,0 +1,38 @@
+<div class="flex justify-center order-1 md:order-1">
+  <div class="relative rounded-lg shadow-lg overflow-hidden w-full max-w-[280px] aspect-[9/16]">
+
+    <!-- Video -->
+    <video
+      #videoPlayer
+      src="./videoAcidBlack.mp4"
+      autoplay
+      loop
+      muted
+      playsinline
+      class="w-full h-full object-cover cursor-pointer"
+      (click)="togglePlay(videoPlayer)"
+      (timeupdate)="trackProgress(videoPlayer)"
+      (ended)="resetProgress()"
+    ></video>
+
+    <!-- Overlay de pausa usando @if -->
+    @if(videoPaused()) {
+      <div
+        class="absolute inset-0 flex items-center justify-center bg-black/40 cursor-pointer"
+        (click)="togglePlay(videoPlayer)"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-white" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M8 5v14l11-7z"/>
+        </svg>
+      </div>
+    }
+
+    <!-- Barra de progreso -->
+    <div class="absolute top-0 left-0 w-full h-1 bg-white/30">
+      <div
+        class="h-full bg-[#d1f43d] transition-all duration-100"
+        [style.width.%]="progress()"
+      ></div>
+    </div>
+  </div>
+</div>
