@@ -1,20 +1,17 @@
-<section  class=" py-16 lg:py-24 ">
-
-
-  <div class=" px-6 sm:px-8 lg:px-12">
+<section class="py-16 lg:py-24">
+  <div class="px-6 sm:px-8 lg:px-12">
     <div class="grid grid-cols-2 lg:grid-cols-3 gap-8">
 
-      @for (cat of categorias(); track cat.nombre) {
-
+      @for(cat of categorias(); track cat.nombre) {
         <Inicio-grid-card
           [nombre]="cat.nombre"
           [imagen]="cat.imagen"
           class="aspect-square"
-
         />
-
       } @empty {
-        <p class="text-white text-center col-span-2 lg:col-span-3">No se encontraron categorías.</p>
+        <p class="text-white text-center col-span-2 lg:col-span-3">
+          No se encontraron categorías.
+        </p>
       }
 
     </div>

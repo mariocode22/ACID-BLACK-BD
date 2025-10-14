@@ -1,19 +1,22 @@
-<div class="max-w-6xl mx-auto p-5"> <!-- 👈 limita el ancho y centra -->
+<div class="max-w-6xl mx-auto p-5">
   <p-carousel
     [value]="products"
     [numVisible]="3"
-    [numScroll]="3"
+    [numScroll]="1"
     [circular]="true"
     [responsiveOptions]="responsiveOptions"
-    [autoplayInterval]="4000">
-
+    [autoplayInterval]="6000"
+    [showIndicators]="true"
+    [showNavigators]="true"
+  >
     <ng-template pTemplate="item" let-product>
-      <div class="  flex justify-center">
+      <div class="flex justify-center">
         <img
           [src]="product.image"
-          [alt]="product.name"
-          class="w-75 h-75 object-cover rounded-lg shadow-md" />
-          <!-- 👆 tamaño fijo para todas las imágenes -->
+          [alt]="'Modelo ' + product.image"
+          class="w-48 h-48 md:w-60 md:h-60 object-cover rounded-lg shadow-md"
+          loading="lazy"
+        />
       </div>
     </ng-template>
   </p-carousel>
