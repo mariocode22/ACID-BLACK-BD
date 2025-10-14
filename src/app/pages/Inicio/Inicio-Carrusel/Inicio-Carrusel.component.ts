@@ -7,7 +7,7 @@ import { TagModule } from 'primeng/tag';
 @Component({
   selector: 'Inicio-carrusel',
   imports: [CommonModule, CarouselModule, ButtonModule, TagModule],
-  templateUrl: './inicio-carrusel.component.html',
+  templateUrl: './Inicio-carrusel.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InicioCarruselComponent implements OnInit {
