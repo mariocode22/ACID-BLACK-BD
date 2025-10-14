@@ -1,6 +1,6 @@
 <div class="max-w-6xl mx-auto p-5">
   <p-carousel
-    [value]="products"
+    [value]="products()"
     [numVisible]="3"
     [numScroll]="1"
     [circular]="true"
@@ -10,11 +10,11 @@
     [showNavigators]="true"
   >
     <ng-template pTemplate="item" let-product>
-      <div class="flex justify-center">
+      <div class="flex justify-center p-2">
         <img
           [src]="product.image"
           [alt]="'Modelo ' + product.image"
-          class="w-48 h-48 md:w-60 md:h-60 object-cover rounded-lg shadow-md"
+          class="w-72 h-72 min-w-[180px] min-h-[180px] sm:w-60 sm:h-60 md:w-64 md:h-64 object-cover rounded-lg shadow-md md:shadow-xl"
           loading="lazy"
         />
       </div>

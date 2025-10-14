@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CarouselModule } from 'primeng/carousel';
 import { ButtonModule } from 'primeng/button';
@@ -7,11 +7,11 @@ import { TagModule } from 'primeng/tag';
 @Component({
   selector: 'Inicio-carrusel',
   imports: [CommonModule, CarouselModule, ButtonModule, TagModule],
-  templateUrl: './Inicio-Carrusel.component.html',
+  templateUrl: './inicio-carrusel.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InicioCarruselComponent implements OnInit {
-  allProducts = [
+  private allProducts = [
     { image: 'modelos/modelo1.jpg' },
     { image: 'modelos/modelo2.jpg' },
     { image: 'modelos/modelo3.jpg' },
@@ -23,8 +23,8 @@ export class InicioCarruselComponent implements OnInit {
     { image: 'modelos/modelo10.jpg' },
   ];
 
-  // Inicialmente solo cargamos las primeras 3 imágenes
-  products = this.allProducts.slice(0, 3);
+  // Inicialmente solo 3 productos
+  products = signal(this.allProducts.slice(0, 3));
 
   responsiveOptions = [
     { breakpoint: '1199px', numVisible: 3, numScroll: 1 },
@@ -33,9 +33,9 @@ export class InicioCarruselComponent implements OnInit {
   ];
 
   ngOnInit(): void {
-    // Cargar progresivamente el resto de productos después de 1s
+    // Carga progresiva después de 1s
     setTimeout(() => {
-      this.products = [...this.allProducts];
+      this.products.set([...this.allProducts]);
     }, 1000);
   }
 }
