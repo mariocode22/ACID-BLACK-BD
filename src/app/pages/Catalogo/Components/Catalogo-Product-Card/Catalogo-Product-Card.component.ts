@@ -1,5 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, signal, ElementRef, OnInit, OnDestroy, DestroyRef, inject } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ChangeDetectionStrategy, Component, Input, signal, ElementRef, OnInit, OnDestroy, inject } from '@angular/core';
 
 @Component({
   selector: 'Catalogo-Product-Card',
@@ -27,7 +26,7 @@ export class CatalogoProductCardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // Limpieza del observer si aún existe
+    // Limpieza del observer
     this.observer?.disconnect();
   }
 
@@ -41,20 +40,24 @@ export class CatalogoProductCardComponent implements OnInit, OnDestroy {
     this.observer = new IntersectionObserver(
       (entries) => {
         entries.forEach(entry => {
+          // ✅ CLAVE: Actualizar el signal cada vez que cambia la visibilidad
           if (entry.isIntersecting) {
+            // Cuando entra al viewport
             this.isVisible.set(true);
-            // Desconectar después de la primera animación
-            this.observer?.unobserve(this.el.nativeElement);
+          } else {
+            // Cuando sale del viewport
+            this.isVisible.set(false);
           }
         });
       },
       {
-        threshold: 0.1,
-        // Opcional: Agregar rootMargin para disparar antes
-        // rootMargin: '50px'
+        // Ajusta el threshold según prefieras
+        threshold: 0.2, // Se activa cuando el 20% es visible
+        // rootMargin: '0px' // Puedes agregar margen si quieres que anime antes/después
       }
     );
 
+    // NO desconectamos el observer, lo dejamos observando continuamente
     this.observer.observe(this.el.nativeElement);
   }
 
@@ -69,7 +72,7 @@ export class CatalogoProductCardComponent implements OnInit, OnDestroy {
     return new Intl.NumberFormat('es-CO', {
       style: 'currency',
       currency: 'COP',
-      minimumFractionDigits: 0 // Opcional: Sin decimales para pesos colombianos
+      minimumFractionDigits: 0
     }).format(this.precio());
   }
 }
