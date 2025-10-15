@@ -7,7 +7,7 @@ import { CatalogoProductCardComponent } from '../Components/Catalogo-Product-Car
   imports: [CatalogoProductCardComponent],
   templateUrl: './Catalogo.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone:true,
+  standalone:true
 })
 export class CatalogoComponent {
 
