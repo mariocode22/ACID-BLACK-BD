@@ -2,7 +2,8 @@ import { ChangeDetectionStrategy, Component, Input, signal } from '@angular/core
 
 @Component({
   selector: 'Catalogo-Product-Card',
-  templateUrl: './catalogo-product-card.component.html',
+  templateUrl: './Catalogo-Product-Card.component.html',
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CatalogoProductCardComponent {
