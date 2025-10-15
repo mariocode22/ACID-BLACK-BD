@@ -1,6 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { NavComponent } from './nav-bar/Nav/Nav.component';
+import { NavComponent } from './common/nav-bar/Nav/Nav.component';
+
 
 
 @Component({

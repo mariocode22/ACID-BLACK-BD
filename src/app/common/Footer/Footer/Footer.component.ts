@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
-  selector: 'Inicio-footer',
+  selector: 'Main-Footer',
   imports: [],
-  templateUrl: './inicio-Footer.component.html',
+  templateUrl: './Footer.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class InicioFooterComponent { }
+export class FooterComponent { }
