@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component,signal } from '@angular/core';
 import { Producto } from '../types/Producto';
 import { CatalogoProductCardComponent } from '../Components/Catalogo-Product-Card/Catalogo-Product-Card.component';
+import { FooterComponent } from '../../../common/Footer/Footer/Footer.component';
 
 @Component({
   selector: 'catalogo',
-  imports: [CatalogoProductCardComponent],
+  imports: [CatalogoProductCardComponent,FooterComponent],
   templateUrl: './Catalogo.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone:true
