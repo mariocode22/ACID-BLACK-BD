@@ -35,7 +35,23 @@ export class CatalogoComponent {
       descripcion: 'Descripción breve del producto 3',
       precio: 45000,
       categoria:"gorras"
-    }
+    },
+    {
+      id: 4,
+      imagen: './referencias/camiseta.jpg',
+      nombre: 'camista',
+      descripcion: 'Descripción breve del producto 1',
+      precio: 60000,
+      categoria:"camisetas"
+    },
+    {
+      id: 5,
+      imagen: './referencias/camiseta.jpg',
+      nombre: 'camista',
+      descripcion: 'Descripción breve del producto 1',
+      precio: 60000,
+      categoria:"camisetas"
+    },
   ]);
 
 }

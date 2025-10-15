@@ -1,43 +1,97 @@
+<!-- Template HTML mejorado para la tarjeta de producto -->
 <div
-  class="group relative bg-white rounded-xl shadow-md overflow-hidden transition-transform duration-300 hover:shadow-xl hover:scale-[1.02] max-w-xs cursor-pointer"
+  class="product-card group relative bg-white rounded-xl shadow-md overflow-hidden
+         transition-all duration-500 max-w-xs cursor-pointer
+         hover:shadow-2xl hover:scale-[1.03]
+         opacity-0 translate-y-8"
+  [class.card-visible]="isVisible()"
 >
-
-  <!-- Badge -->
+  <!-- Badge de categoría -->
   <div class="absolute top-4 left-4 z-10">
-    <span class="px-3 py-1 bg-[#d1f43d] text-gray-900 text-xs font-bold rounded-full shadow-sm">
+    <span class="px-3 py-1 bg-[#d1f43d] text-gray-900 text-xs font-bold rounded-full shadow-sm
+                 transition-transform duration-300 group-hover:scale-110">
       {{ categoria() }}
     </span>
   </div>
 
-  <!-- Imagen -->
-  <div class="relative bg-white h-64 w-full overflow-hidden">
+  <!-- Contenedor de imagen -->
+  <div class="relative bg-gray-100 h-64 w-full overflow-hidden">
     <img
       [src]="imagen()"
       [alt]="nombre()"
-      class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+      loading="lazy"
+      class="h-full w-full object-cover transition-transform duration-500
+             group-hover:scale-110 group-hover:rotate-1"
     />
+    <!-- Overlay sutil al hacer hover -->
+    <div class="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
   </div>
 
-  <!-- Contenido -->
-  <div class="p-5 bg-white flex flex-col justify-between">
-    <h3 class="font-bold text-lg mb-2 text-gray-800 line-clamp-2">
-      {{ nombre() }}
-    </h3>
+  <!-- Contenido de la tarjeta -->
+  <div class="p-5 bg-white flex flex-col justify-between min-h-[180px]">
+    <div>
+      <h3 class="font-bold text-lg mb-2 text-gray-800 line-clamp-2
+                 group-hover:text-gray-900 transition-colors duration-300">
+        {{ nombre() }}
+      </h3>
 
-    <p class="text-gray-600 text-sm mb-4 line-clamp-2">
-      {{ descripcion() }}
-    </p>
+      <p class="text-gray-600 text-sm mb-4 line-clamp-2 leading-relaxed">
+        {{ descripcion() }}
+      </p>
+    </div>
 
     <!-- Precio -->
-    <div class="pt-3 border-t border-gray-100">
-      <p class="font-black text-2xl text-center text-gray-900">
+    <div class="pt-3 border-t border-gray-100 mt-auto">
+      <p class="font-black text-2xl text-center text-gray-900
+                transition-transform duration-300 group-hover:scale-105">
         {{ precioFormateado }}
       </p>
     </div>
   </div>
 
-  <!-- Borde inferior lima animado -->
+  <!-- Borde animado inferior con efecto mejorado -->
   <div
-    class="h-1 bg-[#d1f43d] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"
+    class="h-1 bg-gradient-to-r from-[#d1f43d] to-[#b8d934]
+           origin-left transition-all duration-700 ease-out
+           scale-x-0"
+    [class.scale-x-100]="isVisible()"
+    [class.shadow-[0_0_10px_rgba(209,244,61,0.5)]]="isVisible()"
   ></div>
+
+  <!-- Efecto de brillo al hacer hover (opcional) -->
+  <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+    <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent
+                transform -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+  </div>
 </div>
+
+<style>
+/* Estilos CSS para las animaciones */
+.product-card {
+  /* Estado inicial: invisible y desplazada */
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.product-card.card-visible {
+  /* Estado visible: animación de entrada */
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+/* Animación escalonada para múltiples tarjetas (opcional) */
+.product-card:nth-child(1) { transition-delay: 0ms; }
+.product-card:nth-child(2) { transition-delay: 100ms; }
+.product-card:nth-child(3) { transition-delay: 200ms; }
+.product-card:nth-child(4) { transition-delay: 300ms; }
+.product-card:nth-child(5) { transition-delay: 400ms; }
+
+/* Efecto de pulse en el precio al hacer visible */
+@keyframes price-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.card-visible .font-black {
+  animation: price-pulse 0.6s ease-out 0.4s;
+}
+</style>
