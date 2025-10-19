@@ -22,9 +22,15 @@ export const murales = signal<Mural[]>([
     categoria: 'The lawless west'
   },
   {
-    titulo: 'Camisetas — Filo y confort',
-    texto: 'Comodidad sin perder actitud. Nuestras camisetas combinan resistencia y estilo para acompañarte en cada movimiento. Diseñadas para durar y pensadas para destacar. No solo entrenas: impones presencia.',
-    imagen: '/referencias/mural-shorts.jpg',
+    titulo: 'Camisetas',
+    texto: 'No es solo una camiseta. Es un grito visual, una declaración de guerra a lo común. Quien lleva una Acid Black no busca encajar… rompe el molde, se ríe de la norma, camina entre sombras con orgullo. Porque vestir oscuro no es esconderse, es revelar lo que otros temen mostrar. Cada prenda es resistencia tejida en algodón, una pieza que vibra con la energía del inconformismo. No sigue tendencias, las quema. No busca aprobación, la desafía. Acid Black no viste cuerpos, viste almas rebeldes: las que caminan solas, las que arden sin permiso, las que encuentran belleza en el caos y libertad en la oscuridad.',
+    imagen: '/referencias/camisetas.jpg',
     categoria: 'camisetas'
+  },
+  {
+    titulo: 'Gorras',
+    texto: 'Comodidad sin perder actitud. Nuestras gorras combinan resistencia y estilo, acompañándote en cada movimiento y en cada mirada desafiante. Diseñadas para durar, pensadas para destacar, cada pieza impone presencia sin pedir permiso. No solo cubres tu cabeza: declaras tu identidad. Estas gorras son para quienes caminan sin miedo, para los que desafían lo común y buscan marcar su camino. Porque en Acid Black, cada accesorio es un arma de estilo y rebeldía.',
+    imagen: '/referencias/gorras.jpg',
+    categoria: 'gorras'
   }
 ]);

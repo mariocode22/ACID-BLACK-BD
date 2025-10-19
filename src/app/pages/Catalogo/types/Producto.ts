@@ -17,12 +17,13 @@ export type Genero =
 
 export interface Producto {
   id: number;
-  imagen: string;
+  imagenes: string[];
   nombre: string;
   descripcion: string;
   precio: number;
   categoria: Categorias; // 🔒 Solo puede ser una de las categorías válidas
   genero?: Genero
+  imagen?: string;
 }
 
 export interface Mural {

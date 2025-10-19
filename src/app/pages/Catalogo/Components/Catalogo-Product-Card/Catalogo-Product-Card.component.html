@@ -1,11 +1,17 @@
-<div class="product-card group relative bg-white rounded-xl shadow-md overflow-hidden
+<div
+  class="product-card group relative bg-white rounded-xl shadow-md overflow-hidden
          transition-all duration-500 max-w-xs cursor-pointer
-         hover:shadow-[0_10px_25px_rgba(209,244,61,0.3)] hover:scale-[1.03]">
-  <!-- ✅ Barra superior animada -->
+         hover:shadow-[0_10px_25px_rgba(209,244,61,0.3)] hover:scale-[1.03]"
+>
+  <!-- Barra superior animada -->
   <div class="absolute top-0 left-0 right-0 z-20 h-1.5 bg-gray-100 overflow-hidden">
-    <div class="h-full bg-gradient-to-r from-[#b8d934] via-[#d1f43d] to-[#b8d934]
-             origin-left transition-transform duration-700 ease-in-out scale-x-0" [class.scale-x-100]="isVisible()"
-      [class.shadow-[0_0_20px_rgba(209,244,61,0.8)]]="isVisible()"></div>
+    <div
+      class="h-full bg-gradient-to-r from-[#b8d934] via-[#d1f43d] to-[#b8d934] origin-left transition-transform duration-700 ease-in-out"
+      [ngClass]="{
+        'scale-x-100 shadow-lg': isVisible(),
+        'scale-x-0': !isVisible()
+      }"
+    ></div>
   </div>
 
   <!-- Badge de categoría -->
@@ -15,21 +21,76 @@
     </span>
   </div>
 
-  <!-- Contenedor de imagen -->
-  <div class="relative bg-gray-100 h-64 w-full overflow-hidden">
-    <img [src]="imagen()" [alt]="nombre() + ' - imagen del producto'" loading="lazy"
-      class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+  <!-- Carrusel con controles -->
+  <div class="relative bg-gray-100 h-64 w-full overflow-hidden rounded-t-xl">
+    <!-- Imágenes -->
+    <div class="relative h-full w-full">
+      @for (img of imagenes(); track img; let i = $index) {
+        <img
+          [src]="img"
+          [alt]="nombre() + ' - imagen ' + (i + 1)"
+          loading="lazy"
+          class="absolute inset-0 h-full w-full object-cover transition-opacity duration-500"
+          [ngClass]="{
+            'opacity-100 z-10': i === currentImageIndex(),
+            'opacity-0 z-0': i !== currentImageIndex()
+          }"
+        />
+      }
+    </div>
+
+    <!-- Controles del carrusel (solo si hay más de 1 imagen) -->
+    @if (hasMultipleImages()) {
+      <!-- Botones prev/next -->
+      <button
+        (click)="prevImage()"
+        class="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-black/70 text-white rounded-full p-2 transition-all duration-300"
+        aria-label="Imagen anterior"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+      </button>
+
+      <button
+        (click)="nextImage()"
+        class="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-black/70 text-white rounded-full p-2 transition-all duration-300"
+        aria-label="Imagen siguiente"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+
+      <!-- Indicadores -->
+      <div class="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+        @for (img of imagenes(); track img; let i = $index) {
+          <button
+            (click)="goToImage(i)"
+            class="w-2 h-2 rounded-full transition-all duration-300"
+            [ngClass]="{
+              'bg-[#d1f43d] w-6': i === currentImageIndex(),
+              'bg-white/60 hover:bg-white/80': i !== currentImageIndex()
+            }"
+            [attr.aria-label]="'Ir a imagen ' + (i + 1)"
+          ></button>
+        }
+      </div>
+    }
   </div>
 
-  <!-- Contenido de la tarjeta -->
-  <div class="p-5 bg-white flex flex-col justify-between min-h-[220px]
-           opacity-0 translate-y-4 transition-all duration-700 ease-out" [class.opacity-100]="isVisible()"
-    [class.translate-y-0]="isVisible()">
+  <!-- Contenido -->
+  <div
+    class="p-5 bg-white flex flex-col justify-between min-h-[220px] transition-all duration-700 ease-out"
+    [ngClass]="{
+      'opacity-100 translate-y-0': isVisible(),
+      'opacity-0 translate-y-4': !isVisible()
+    }"
+  >
     <div>
       <h3 class="font-bold text-lg mb-2 text-gray-800 line-clamp-2">
         {{ nombre() }}
       </h3>
-
       <p class="text-gray-600 text-sm mb-4 line-clamp-2 leading-relaxed">
         {{ descripcion() }}
       </p>
@@ -42,15 +103,16 @@
       </p>
     </div>
 
-
-
-    <!--  Botón de WhatsApp  -->
-    <a [href]="whatsappLink" target="_blank" rel="noopener noreferrer" class="inline-block text-center bg-[#b8d934] text-white text-sm font-medium px-4 py-2 mb-4
-         rounded-full shadow-sm hover:bg-[#1ebe5b] hover:scale-[1.03]
-         transition-all duration-300 self-center">
-      Consultar
+    <!-- Botón de WhatsApp -->
+    <a
+      [href]="whatsappLink"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="inline-block text-center bg-[#25D366] text-white text-sm font-medium px-4 py-2
+             rounded-full shadow-sm hover:bg-[#1ebe5b] hover:scale-[1.03]
+             transition-all duration-300 self-center"
+    >
+      Consultar por WhatsApp
     </a>
-
-
   </div>
 </div>
