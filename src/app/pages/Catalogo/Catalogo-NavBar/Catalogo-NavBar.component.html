@@ -1,10 +1,14 @@
-<nav class="flex flex-wrap justify-center gap-3 mb-10">
+<nav class="flex flex-wrap justify-center gap-2 mb-8">
   @for (categoria of categorias; track categoria) {
-  <button class="px-4 py-2 rounded-full transition-all border text-3xl font-bold"
-    [class.bg-green-600]="categoriaActiva() === categoria" [class.text-white]="categoriaActiva() === categoria"
-    [class.border-green-600]="categoriaActiva() === categoria" [class.border-gray-300]="categoriaActiva() !== categoria"
-    (click)="seleccionarCategoria(categoria)">
-    {{ categoria}}
-  </button>
+    <button
+      class="px-3 py-1.5 rounded-full transition-all border text-base font-semibold"
+      [class.bg-green-600]="categoriaActiva() === categoria"
+      [class.text-white]="categoriaActiva() === categoria"
+      [class.border-green-600]="categoriaActiva() === categoria"
+      [class.border-gray-300]="categoriaActiva() !== categoria"
+      (click)="seleccionarCategoria(categoria)"
+    >
+      {{ categoria }}
+    </button>
   }
 </nav>
