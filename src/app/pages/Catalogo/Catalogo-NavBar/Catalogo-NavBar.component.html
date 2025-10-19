@@ -1,11 +1,13 @@
 <nav class="flex flex-wrap justify-center gap-2 mb-8">
   @for (categoria of categorias; track categoria) {
     <button
-      class="px-3 py-1.5 rounded-full transition-all border text-base font-semibold"
-      [class.bg-green-600]="categoriaActiva() === categoria"
+      class="px-3 py-1.5 rounded-full transition-all text-base font-semibold"
+      [class.bg-[#b8d934]]="categoriaActiva() === categoria"
       [class.text-white]="categoriaActiva() === categoria"
-      [class.border-green-600]="categoriaActiva() === categoria"
-      [class.border-gray-300]="categoriaActiva() !== categoria"
+      [class.text-gray-700]="categoriaActiva() !== categoria"
+      [class.border]="categoriaActiva() !== categoria"
+      [class.border-[#b8d934]]="categoriaActiva() !== categoria"
+      [class.hover:bg-[#b8d934]/10]="categoriaActiva() !== categoria"
       (click)="seleccionarCategoria(categoria)"
     >
       {{ categoria }}
