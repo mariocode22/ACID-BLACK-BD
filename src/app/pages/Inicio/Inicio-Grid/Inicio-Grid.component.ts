@@ -9,7 +9,7 @@ import { InicioGridCardComponent } from '../Components/Inicio-Grid-Card/Inicio-G
 })
 export class InicioGridComponent {
   private allCategorias = [
-    { nombre: 'CAMISETAS', imagen: 'referencias/camisetas.jpg' },
+    { nombre: 'COWBOY', imagen: 'referencias/cowboy2.jpg' },
     { nombre: 'SHORTS', imagen: 'referencias/shorts.jpg' },
     { nombre: 'CAMISETAS', imagen: 'modelos/modelo3.jpg' },
     { nombre: 'OVERSIZE', imagen: 'modelos/modelo4.jpg' },

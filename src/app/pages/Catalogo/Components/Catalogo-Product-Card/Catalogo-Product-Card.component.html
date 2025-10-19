@@ -3,7 +3,7 @@
          transition-all duration-500 max-w-xs cursor-pointer
          hover:shadow-[0_10px_25px_rgba(209,244,61,0.3)] hover:scale-[1.03]"
 >
-  <!-- ✅ Barra superior animada con scroll -->
+  <!-- ✅ Barra superior animada -->
   <div class="absolute top-0 left-0 right-0 z-20 h-1.5 bg-gray-100 overflow-hidden">
     <div
       class="h-full bg-gradient-to-r from-[#b8d934] via-[#d1f43d] to-[#b8d934]
@@ -54,15 +54,20 @@
       </p>
     </div>
 
-    <!-- ✅ Botón de WhatsApp -->
-    <a
-      [href]="whatsappLink"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="block text-center bg-[#25D366] text-white font-semibold py-2 rounded-lg shadow-md
-             hover:bg-[#1ebe5b] hover:scale-[1.02] transition-all"
-    >
-      Consultar por WhatsApp
-    </a>
+
+   <!-- ✅ Botón de WhatsApp con ícono centrado -->
+<!-- ✅ Botón de WhatsApp compacto -->
+<a
+  [href]="whatsappLink"
+  target="_blank"
+  rel="noopener noreferrer"
+  class="inline-block text-center bg-[#25D366] text-white text-sm font-medium px-4 py-2
+         rounded-full shadow-sm hover:bg-[#1ebe5b] hover:scale-[1.03]
+         transition-all duration-300 self-center"
+>
+  Consultar por WhatsApp
+</a>
+
+
   </div>
 </div>
