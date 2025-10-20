@@ -1,23 +1,26 @@
 <header
-  class="fixed top-0 left-0 w-full z-50 flex items-center justify-between border-b border-white bg-[#111] px-6 py-7">
+  class="fixed top-0 left-0 w-full z-50 flex items-center justify-between border-b border-[#9b2c3a]/50 bg-[#111] px-6 py-7">
 
   <!-- Logo centrado -->
   <div
     class="absolute left-1/2 transform -translate-x-1/2 flex flex-col items-center text-white font-bold leading-tight">
-    <img src="/acidBlack.png" alt="Logo de Acid Black"
-      class="h-10 w-8 sm:h-12 sm:w-10 mb-0 transition-all duration-300 hover:scale-110" loading="lazy" />
-    <span class="text-[11px] sm:text-xs tracking-widest hover:text-[#d1f43d] transition-colors duration-300 mt-[-2px] font-metal">
+    <img
+      src="/acidBlack.png"
+      alt="Logo de Acid Black"
+      class="h-10 w-8 sm:h-12 sm:w-10 mb-0 transition-all duration-300 hover:scale-110 drop-shadow-[0_0_10px_rgba(120,28,46,0.6)]"
+      loading="lazy"
+    />
+    <span
+      class="text-[11px] sm:text-xs tracking-widest hover:text-[#9b2c3a] transition-colors duration-300 mt-[-2px] font-metal drop-shadow-[0_0_6px_rgba(120,28,46,0.8)]"
+    >
       ACID BLACK
     </span>
   </div>
 
-
   <!-- Botón menú -->
-  <div class="relative ml-auto text-white font-bold text-sm">
+  <div class="relative ml-auto text-white font-bold text-sm hover:text-[#9b2c3a] transition-colors duration-300">
     <nav-lista />
   </div>
-
 </header>
-
 
 <nav-mural />

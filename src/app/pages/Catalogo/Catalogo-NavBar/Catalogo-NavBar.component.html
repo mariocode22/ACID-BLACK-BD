@@ -2,12 +2,13 @@
   @for (categoria of categorias; track categoria) {
     <button
       class="px-3 py-1.5 rounded-full transition-all text-base font-semibold"
-      [class.bg-[#b8d934]]="categoriaActiva() === categoria"
+      [class.bg-[#781c2e]]="categoriaActiva() === categoria"
       [class.text-white]="categoriaActiva() === categoria"
       [class.text-gray-700]="categoriaActiva() !== categoria"
       [class.border]="categoriaActiva() !== categoria"
-      [class.border-[#b8d934]]="categoriaActiva() !== categoria"
-      [class.hover:bg-[#b8d934]/10]="categoriaActiva() !== categoria"
+      [class.border-[#9b2c3a]]="categoriaActiva() !== categoria"
+      [class.hover:bg-[#9b2c3a]/10]="categoriaActiva() !== categoria"
+      [class.shadow-[0_2px_8px_rgba(155,44,58,0.3)]]="categoriaActiva() === categoria"
       (click)="seleccionarCategoria(categoria)"
     >
       {{ categoria }}

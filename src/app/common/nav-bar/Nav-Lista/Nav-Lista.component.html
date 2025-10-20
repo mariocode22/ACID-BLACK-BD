@@ -1,34 +1,33 @@
 <div class="relative ml-auto text-white font-bold text-sm">
-    <button (click)="toggleMenu()"
-      class="flex items-center gap-1 p-2 hover:text-[#d1f43d] transition-colors focus:outline-none rounded-full"
-      aria-label="Abrir o cerrar menú de navegación">
+  <button (click)="toggleMenu()"
+    class="flex items-center gap-1 p-2 rounded-full transition-all duration-300 hover:text-[#8B0000] hover:shadow-[0_0_10px_rgba(139,0,0,0.6)] focus:outline-none"
+    aria-label="Abrir o cerrar menú de navegación">
+    <svg class="w-6 h-6" [class.hidden]="menuAbierto()" fill="none" stroke="currentColor" stroke-width="2"
+      viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+    </svg>
 
-      <svg class="w-6 h-6" [class.hidden]="menuAbierto()" fill="none" stroke="currentColor" stroke-width="2"
-        viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-      </svg>
+    <svg class="w-6 h-6" [class.hidden]="!menuAbierto()" fill="none" stroke="currentColor" stroke-width="2"
+      viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+  </button>
 
-      <svg class="w-6 h-6" [class.hidden]="!menuAbierto()" fill="none" stroke="currentColor" stroke-width="2"
-        viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-      </svg>
-    </button>
-
-    @if (menuAbierto()) {
-    <ul
-      class="absolute right-0 mt-2 w-40 bg-[#222] border border-[#333] rounded-lg shadow-lg transition-all duration-300">
-      <li>
-        <a href="inicio" (click)="toggleMenu()"
-          class="block px-4 py-2 hover:bg-[#d1f43d] hover:text-black rounded-t-lg transition-colors">
-          INICIO
-        </a>
-      </li>
-      <li>
-        <a href="catalogo" (click)="toggleMenu()"
-          class="block px-4 py-2 hover:bg-[#d1f43d] hover:text-black rounded-b-lg transition-colors">
-          CATÁLOGO
-        </a>
-      </li>
-    </ul>
-    }
-  </div>
+  @if (menuAbierto()) {
+  <ul
+    class="absolute right-0 mt-2 w-40 bg-[#111] border border-[#8B0000] rounded-lg shadow-[0_0_15px_rgba(139,0,0,0.5)] transition-all duration-300">
+    <li>
+      <a href="inicio" (click)="toggleMenu()"
+        class="block px-4 py-2 rounded-t-lg transition-all duration-300 hover:bg-[#8B0000] hover:text-white">
+        INICIO
+      </a>
+    </li>
+    <li>
+      <a href="catalogo" (click)="toggleMenu()"
+        class="block px-4 py-2 rounded-b-lg transition-all duration-300 hover:bg-[#8B0000] hover:text-white">
+        CATÁLOGO
+      </a>
+    </li>
+  </ul>
+  }
+</div>
