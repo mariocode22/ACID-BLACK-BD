@@ -123,21 +123,16 @@ export class CatalogoProductCardComponent implements OnInit, OnDestroy {
     const numero = '573006593211';
     const baseUrl = `https://wa.me/${numero}`;
 
-    // Obtener la primera imagen del array
+    // Obtener la primera imagen del array (ya es URL completa de Cloudinary)
     const primeraImagen = this.imagenes()[0];
 
-    // Construir URL completa de la imagen
-    const urlImagenCompleta = primeraImagen
-      ? `${window.location.origin}${primeraImagen}`
-      : '';
-
     const mensaje = encodeURIComponent(
+      (primeraImagen ? `${primeraImagen}\n\n` : '') +
       `Hola, estoy interesado en este producto:\n\n` +
-        `• Nombre: ${this.nombre()}\n` +
-        `• Categoría: ${this.categoria()}\n` +
-        `• Precio: ${this.precioFormateado}` +
-        (this.descripcion() ? `\n• Descripción: ${this.descripcion()}` : '') +
-        (urlImagenCompleta ? `\n\n Ver imagen: ${urlImagenCompleta}` : '')
+      `• Nombre: ${this.nombre()}\n` +
+      `• Categoría: ${this.categoria()}\n` +
+      `• Precio: ${this.precioFormateado}` +
+      (this.descripcion() ? `\n• Descripción: ${this.descripcion()}` : '')
     );
 
     return `${baseUrl}?text=${mensaje}`;
