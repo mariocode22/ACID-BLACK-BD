@@ -1,6 +1,7 @@
 <div class="product-card group relative bg-white rounded-xl shadow-md overflow-hidden
          transition-all duration-500 max-w-xs cursor-pointer
          hover:shadow-[0_10px_25px_rgba(155,44,58,0.3)] hover:scale-[1.03]">
+
   <!-- Barra superior animada -->
   <div class="absolute top-0 left-0 right-0 z-20 h-1.5 bg-gray-100 overflow-hidden">
     <div
@@ -20,7 +21,6 @@
 
   <!-- Carrusel con controles -->
   <div class="relative bg-gray-100 h-64 w-full overflow-hidden rounded-t-xl">
-    <!-- Imágenes -->
     <div class="relative h-full w-full">
       @for (img of imagenes(); track img; let i = $index) {
       <img [src]="img" [alt]="nombre() + ' - imagen ' + (i + 1)" loading="lazy"
@@ -33,7 +33,6 @@
 
     <!-- Controles del carrusel -->
     @if (hasMultipleImages()) {
-    <!-- Botones prev/next -->
     <button (click)="prevImage()"
       class="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-black/70 text-white rounded-full p-2 transition-all duration-300"
       aria-label="Imagen anterior">
@@ -50,7 +49,6 @@
       </svg>
     </button>
 
-    <!-- Indicadores -->
     <div class="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex gap-2">
       @for (img of imagenes(); track img; let i = $index) {
       <button (click)="goToImage(i)" class="w-2 h-2 rounded-full transition-all duration-300" [ngClass]="{
@@ -63,30 +61,27 @@
   </div>
 
   <!-- Contenido -->
-  <div class="p-5 bg-white flex flex-col justify-between min-h-[220px] transition-all duration-700 ease-out" [ngClass]="{
-      'opacity-100 translate-y-0': isVisible(),
-      'opacity-0 translate-y-4': !isVisible()
-    }">
-    <div>
+  <div class="p-5 bg-white flex flex-col justify-between min-h-[280px] transition-all duration-700 ease-out">
+    <div class="overflow-y-auto max-h-[140px]">
       <h3 class="font-bold text-lg mb-2 text-gray-800 line-clamp-2">
         {{ nombre() }}
       </h3>
-      <p class="text-gray-600 text-sm mb-4 line-clamp-2 leading-relaxed">
+      <p class="text-gray-600 text-sm mb-4 leading-relaxed">
         {{ descripcion() }}
       </p>
     </div>
 
     <!-- Precio -->
-    <div class="pt-3 border-t border-gray-100 mt-auto mb-3">
+    <div class="pt-3 border-t border-gray-100 mt-3">
       <p class="font-black text-2xl text-center text-gray-900">
         {{ precioFormateado }}
       </p>
     </div>
 
     <!-- Botón de WhatsApp -->
-    <a [href]="whatsappLink" target="_blank" rel="noopener noreferrer" class="inline-block text-center bg-[#781c2e] text-white text-sm font-medium px-4 py-2
-             rounded-full shadow-sm hover:bg-[#9b2c3a] hover:scale-[1.03]
-             transition-all duration-300 self-center">
+    <a [href]="whatsappLink" target="_blank" rel="noopener noreferrer"
+       class="inline-block text-center bg-[#781c2e] text-white text-sm font-medium px-4 py-2
+              rounded-full shadow-sm hover:bg-[#9b2c3a] hover:scale-[1.03] transition-all duration-300 self-center mt-3">
       Consultar por WhatsApp
     </a>
   </div>
