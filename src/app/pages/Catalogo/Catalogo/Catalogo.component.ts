@@ -1,11 +1,12 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, signal, OnInit } from '@angular/core';
 import { Categorias } from '../types/Producto';
 import { CatalogoProductCardComponent } from '../Components/Catalogo-Product-Card/Catalogo-Product-Card.component';
 import { FooterComponent } from '../../../common/Footer/Footer/Footer.component';
 import { CatalogoNavBarComponent } from '../Catalogo-NavBar/Catalogo-NavBar.component';
 import { CatalogoMuralComponent } from '../Catalogo-Mural/Catalogo-Mural.component';
-import { productos } from '../data/Catalogo-Productos';
 import { murales } from '../data/Catalogo-Mural';
+import { ProductosService } from '../../../../services/productos.service';
+import { productosSignal } from '../../../../services/productos.service';
 
 @Component({
   selector: 'catalogo',
@@ -19,18 +20,16 @@ import { murales } from '../data/Catalogo-Mural';
   templateUrl: './Catalogo.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CatalogoComponent {
-  productos = productos;
+export class CatalogoComponent implements OnInit {
+  productos = productosSignal; // Signal de productos dinámicos
   murales = murales;
 
-  // ✅ Ahora tipado estrictamente con Categorias
   categoriaSeleccionada = signal<Categorias>('todos');
 
   productosFiltrados = computed(() => {
     const categoria = this.categoriaSeleccionada();
     let lista = this.productos();
 
-    // Filtrar por categoría (excepto 'todos')
     if (categoria !== 'todos') {
       lista = lista.filter(p => p.categoria === categoria);
     }
@@ -48,41 +47,34 @@ export class CatalogoComponent {
     const categoria = this.categoriaSeleccionada();
     const listaMurales = this.murales();
 
-    // Si es 'todos', usar el primer mural (default)
-    if (categoria === 'todos') {
-      return listaMurales[0];
-    }
+    if (categoria === 'todos') return listaMurales[0];
 
-    // Buscar mural correspondiente a la categoría
-    const muralEncontrado = listaMurales.find(m => m.categoria === categoria);
-
-    // Si no hay mural para esa categoría, usar el primero como fallback
-    return muralEncontrado || listaMurales[0];
+    return listaMurales.find(m => m.categoria === categoria) || listaMurales[0];
   });
 
- onCategoriaSeleccionada(categoria: string | Categorias) {
-  this.categoriaSeleccionada.set(categoria as Categorias);
-  this.scrollToProducts();
-}
+  constructor(private productosService: ProductosService) {}
+
+  ngOnInit() {
+    // Cargar productos desde Supabase al inicializar
+    this.productosService.cargarProductos();
+  }
+
+  onCategoriaSeleccionada(categoria: string | Categorias) {
+    this.categoriaSeleccionada.set(categoria as Categorias);
+    this.scrollToProducts();
+  }
 
   private scrollToProducts() {
-    // Pequeño delay para que la animación sea más suave
     setTimeout(() => {
       const element = document.querySelector('.grid');
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
+      if (element) element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 100);
   }
 
-  // ✅ Helper: Contar productos por categoría (útil para badges)
   contarProductos(categoria: Categorias): number {
-    if (categoria === 'todos') {
-      return this.productos().length;
-    }
+    if (categoria === 'todos') return this.productos().length;
     return this.productos().filter(p => p.categoria === categoria).length;
   }
 
-  // ✅ Helper: Verificar si hay productos en la categoría actual
   tieneProductos = computed(() => this.productosFiltrados().length > 0);
 }

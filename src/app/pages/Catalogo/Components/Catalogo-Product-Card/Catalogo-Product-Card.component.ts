@@ -19,23 +19,16 @@ import { CommonModule } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CatalogoProductCardComponent implements OnInit, OnDestroy {
-  // Controla animaciones de entrada
   public isVisible = signal(false);
-
-  // Signals de datos del producto
   imagenes = signal<string[]>([]);
   nombre = signal('');
   descripcion = signal('');
   precio = signal(0);
   categoria = signal('');
-
-  // Control del carrusel
   currentImageIndex = signal(0);
 
   private observer?: IntersectionObserver;
   private readonly host = inject(ElementRef<HTMLElement>);
-
-  // Computed para saber si hay múltiples imágenes
   hasMultipleImages = computed(() => this.imagenes().length > 1);
 
   ngOnInit(): void {
@@ -46,7 +39,6 @@ export class CatalogoProductCardComponent implements OnInit, OnDestroy {
     this.observer?.disconnect();
   }
 
-  // Detección de visibilidad (animaciones)
   private setupScrollAnimation(): void {
     if (typeof window === 'undefined' || !('IntersectionObserver' in window)) {
       this.isVisible.set(true);
@@ -61,7 +53,6 @@ export class CatalogoProductCardComponent implements OnInit, OnDestroy {
     this.observer.observe(this.host.nativeElement);
   }
 
-  // Navegación del carrusel
   nextImage(): void {
     const images = this.imagenes();
     if (images.length > 1) {
@@ -81,7 +72,6 @@ export class CatalogoProductCardComponent implements OnInit, OnDestroy {
     this.currentImageIndex.set(index);
   }
 
-  // Inputs reactivos
   @Input() set setImagenes(value: string | string[]) {
     if (Array.isArray(value)) {
       this.imagenes.set(value);
@@ -90,7 +80,7 @@ export class CatalogoProductCardComponent implements OnInit, OnDestroy {
     } else {
       this.imagenes.set([]);
     }
-    this.currentImageIndex.set(0); // Reset al cambiar imágenes
+    this.currentImageIndex.set(0);
   }
 
   @Input() set setNombre(value: string) {
@@ -109,7 +99,6 @@ export class CatalogoProductCardComponent implements OnInit, OnDestroy {
     this.categoria.set(value);
   }
 
-  // Precio formateado (COP)
   get precioFormateado(): string {
     return new Intl.NumberFormat('es-CO', {
       style: 'currency',
@@ -118,21 +107,18 @@ export class CatalogoProductCardComponent implements OnInit, OnDestroy {
     }).format(this.precio());
   }
 
-  // Generador de link dinámico de WhatsApp
   get whatsappLink(): string {
     const numero = '573006593211';
     const baseUrl = `https://wa.me/${numero}`;
-
-    // Obtener la primera imagen del array (ya es URL completa de Cloudinary)
     const primeraImagen = this.imagenes()[0];
 
     const mensaje = encodeURIComponent(
-      (primeraImagen ? `${primeraImagen}\n\n` : '') +
       `Hola, estoy interesado en este producto:\n\n` +
-      `• Nombre: ${this.nombre()}\n` +
-      `• Categoría: ${this.categoria()}\n` +
-      `• Precio: ${this.precioFormateado}` +
-      (this.descripcion() ? `\n• Descripción: ${this.descripcion()}` : '')
+        `• Nombre: ${this.nombre()}\n` +
+        `• Categoría: ${this.categoria()}\n` +
+        `• Precio: ${this.precioFormateado}` +
+        (this.descripcion() ? `\n• Descripción: ${this.descripcion()}` : '') +
+        (primeraImagen ? `\n\n🔗 Ver imagen: ${primeraImagen}` : '')
     );
 
     return `${baseUrl}?text=${mensaje}`;

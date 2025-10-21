@@ -1,39 +1,52 @@
-import { Injectable } from '@angular/core';
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
-import { Producto2 } from '../app/pages/Catalogo/types/Producto';
+import { Injectable, signal } from '@angular/core';
+import { SupabaseClientService } from './supabase-client.service';
+import type { Producto, Categorias, Genero } from '../app/pages/Catalogo/types/Producto';
 
-@Injectable({
-  providedIn: 'root'
-})
+// Signal global para almacenar productos
+export const productosSignal = signal<Producto[]>([]);
+
+@Injectable({ providedIn: 'root' })
 export class ProductosService {
-  private sb: SupabaseClient;
+  constructor(private sb: SupabaseClientService) {}
 
-  constructor() {
-    this.sb = createClient(
-      'https://ttslwoueolrkhuzfwsac.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR0c2x3b3Vlb2xya2h1emZ3c2FjIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MDkzODg1OCwiZXhwIjoyMDc2NTE0ODU4fQ.UGipZ8f3LAHM3YoV4p2JD2_0Z7m283J677Lg8urSV34'
-    );
+  // 📋 Cargar todos los productos desde Supabase
+  async cargarProductos() {
+    try {
+      const { data, error } = await this.sb.supabase
+        .from('productos')
+        .select('*, imagenes_producto(*)')
+        .order('fecha_creacion', { ascending: false });
+
+      if (error) throw error;
+
+      const productos: Producto[] = (data || []).map((item: any) => ({
+        id: item.id,
+        nombre: item.nombre,
+        descripcion: item.descripcion,
+        precio: Number(item.precio),
+        categoria: this.validarCategoria(item.categoria),
+        genero: this.validarGenero(item.genero),
+        imagenes: item.imagenes_producto?.map((img: any) => img.url) || []
+      }));
+
+      // Actualiza el signal
+      productosSignal.set(productos);
+
+    } catch (error) {
+      console.error('Error al cargar productos:', error);
+    }
   }
 
-  // ✅ Obtener todos los productos con sus imágenes
-  async getProductos(): Promise<Producto2[]> {
-    const { data, error } = await this.sb
-      .from('productos')
-      .select('*, imagenes_producto(*)');
-
-    if (error) throw error;
-    return data as Producto2[];
+  // 🔒 Validaciones internas
+  private validarCategoria(categoria: any): Categorias {
+    const categoriasValidas: Categorias[] = [
+      "gorras","shorts","cowboys","camisetas","The lawless west","crop tops","todos","chaquetas"
+    ];
+    return categoriasValidas.includes(categoria) ? categoria : "todos";
   }
 
-  // ✅ Obtener un producto por ID
-  async getProductoById(id: number): Promise<Producto2 | null> {
-    const { data, error } = await this.sb
-      .from('productos')
-      .select('*, imagenes_producto(*)')
-      .eq('id', id)
-      .maybeSingle(); // obtiene solo uno
-
-    if (error) throw error;
-    return data as Producto2 | null;
+  private validarGenero(genero: any): Genero | undefined {
+    const generosValidos: Genero[] = ["hombre","mujer"];
+    return generosValidos.includes(genero) ? genero : undefined;
   }
 }
