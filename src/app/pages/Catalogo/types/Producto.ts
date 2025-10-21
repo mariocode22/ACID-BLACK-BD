@@ -23,13 +23,28 @@ export interface Producto {
   precio: number;
   categoria: Categorias; // 🔒 Solo puede ser una de las categorías válidas
   genero?: Genero
-  imagen?: string;
+
 }
 
 export interface Mural {
   titulo: String
   texto: string;
   imagen: string;
-  categoria:Categorias
+  categoria: Categorias
 
+}
+
+export interface Producto2 {
+  id: number;
+  nombre: string;
+  descripcion: string;
+  precio: number;
+  categoria: string;
+  imagenes_producto?: ImagenProducto[];
+}
+
+export interface ImagenProducto {
+  id: number;
+  url: string;
+  producto_id: number;
 }
