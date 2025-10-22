@@ -23,7 +23,11 @@ export class CatalogoNavBarComponent {
     'The lawless west',
     'crop tops',
     'chaquetas',
+    'conjuntos',
+    'nuevo',
+    'prendas inferiores',
     'hoodies'
+
   ];
 
   // Método para seleccionar categoría

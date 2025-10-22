@@ -1,38 +1,33 @@
 export type Categorias =
   | "gorras"
-  | "shorts"
   | "hoodies"
   | "camisetas"
   | "The lawless west"
   | "crop tops"
   | "todos"
+  | "nuevo"
+  | "conjuntos"
+  | "prendas inferiores"
   | "cowboys"
   | "chaquetas";
 
+export type Genero = "hombre" | "mujer";
 
-export type Genero =
-  | "hombre"
-  | "mujer";
-
-
-
+// ✅ CAMBIO PRINCIPAL: categorias ahora es un array
 export interface Producto {
   id: number;
-  imagenes: string[];
+  imagenes: string[]; // Array de URLs (vendrá de la tabla imagenes_producto)
   nombre: string;
   descripcion: string;
   precio: number;
-  categoria: Categorias; // 🔒 Solo puede ser una de las categorías válidas
-  genero?: Genero
-
+  categorias: Categorias[]; // 🔥 Array de categorías
+  genero?: Genero;
 }
 
+// Mural sigue igual (una sola categoría por mural)
 export interface Mural {
-  titulo: String
+  titulo: string;
   texto: string;
   imagen: string;
-  categoria:Categorias
-
+  categoria: Categorias;
 }
-
-

@@ -11,6 +11,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { Categorias } from '../../types/Producto';
 
 @Component({
   selector: 'Catalogo-Product-Card',
@@ -25,7 +26,10 @@ export class CatalogoProductCardComponent implements OnInit, OnDestroy {
   nombre = signal('');
   descripcion = signal('');
   precio = signal(0);
-  categoria = signal('');
+
+  // 🔥 CAMBIO PRINCIPAL: Ahora es un array de categorías
+  categorias = signal<Categorias[]>([]);
+
   currentImageIndex = signal(0);
 
   private observer?: IntersectionObserver;
@@ -75,7 +79,8 @@ export class CatalogoProductCardComponent implements OnInit, OnDestroy {
     this.currentImageIndex.set(index);
   }
 
-  // ==== Entradas ====
+  // ==== ENTRADAS ====
+
   @Input() set setImagenes(value: string | string[]) {
     if (Array.isArray(value)) {
       this.imagenes.set(value);
@@ -99,11 +104,27 @@ export class CatalogoProductCardComponent implements OnInit, OnDestroy {
     this.precio.set(value);
   }
 
-  @Input() set setCategoria(value: string) {
-    this.categoria.set(value);
+  // 🔥 NUEVO: Input principal para múltiples categorías
+  @Input() set setCategorias(value: Categorias | Categorias[]) {
+    if (Array.isArray(value)) {
+      this.categorias.set(value);
+    } else if (value) {
+      // Si recibe una sola categoría, convertirla a array
+      this.categorias.set([value]);
+    } else {
+      this.categorias.set([]);
+    }
   }
 
-  // ==== Utilidades ====
+  // 🔄 RETROCOMPATIBILIDAD: Mantener setCategoria (singular) por si acaso
+  @Input() set setCategoria(value: Categorias) {
+    if (value) {
+      this.categorias.set([value]);
+    }
+  }
+
+  // ==== UTILIDADES ====
+
   get precioFormateado(): string {
     return new Intl.NumberFormat('es-CO', {
       style: 'currency',
@@ -112,17 +133,25 @@ export class CatalogoProductCardComponent implements OnInit, OnDestroy {
     }).format(this.precio());
   }
 
-  // ==== WhatsApp ====
+  // ==== WHATSAPP ====
+
   get whatsappLink(): string {
     const numero = '573006593211';
+
+    // 🔥 CAMBIO: Mostrar todas las categorías en el mensaje
+    const categoriasTexto = this.categorias().length > 0
+      ? this.categorias().join(', ')
+      : 'Sin categoría';
+
     const mensaje = encodeURIComponent(
       `👋 ¡Hola! Me interesa este producto:\n\n` +
       `📦 *${this.nombre()}*\n` +
-      `🏷️ Categoría: ${this.categoria()}\n` +
+      `🏷️ Categorías: ${categoriasTexto}\n` +
       `💰 Precio: ${this.precioFormateado}\n\n` +
       `🖼️ Imagen: ${this.imagenes()[0] || ''}\n\n` +
       `¿Disponible? 😊`
     );
+
     return `https://api.whatsapp.com/send?phone=${numero}&text=${mensaje}`;
   }
 
@@ -130,8 +159,9 @@ export class CatalogoProductCardComponent implements OnInit, OnDestroy {
     window.open(this.whatsappLink, '_blank', 'noopener,noreferrer');
   }
 
-  // ==== Navegación al catálogo ====
+  // ==== NAVEGACIÓN ====
+
   irAlCatalogo(): void {
-    this.router.navigate(['/catalogo']); // Cambia la ruta si es otra
+    this.router.navigate(['/catalogo']);
   }
 }
