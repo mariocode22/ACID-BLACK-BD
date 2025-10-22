@@ -1,24 +1,36 @@
-import { ChangeDetectionStrategy, Component, Output, signal, EventEmitter } from '@angular/core';
+import { ChangeDetectionStrategy, Component, output, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'Catalogo-nav-bar',
-  imports: [],
   standalone: true,
+  imports: [CommonModule],
   templateUrl: './Catalogo-NavBar.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CatalogoNavBarComponent {
+  // Signal output (reemplaza @Output EventEmitter)
+  categoriaSeleccionadaChange = output<string>();
 
-
-
-
-  @Output() categoriaSeleccionadaChange = new EventEmitter<string>();
-
+  // Signal para la categoría activa
   categoriaActiva = signal<string>('todos');
 
-  categorias = ['todos', 'camisetas', 'gorras', "The lawless west", "crop tops","chaquetas","hoodies"];
+  // Array normal (NO signal) - Solución al error
+  categorias: string[] = [
+    'todos',
+    'camisetas',
+    'gorras',
+    'The lawless west',
+    'crop tops',
+    'chaquetas',
+    'hoodies'
+  ];
 
-  seleccionarCategoria(categoria: string) {
+  // Método para seleccionar categoría
+  seleccionarCategoria(categoria: string): void {
+    // Evita re-renderizados si es la misma categoría
+    if (categoria === this.categoriaActiva()) return;
+
     this.categoriaActiva.set(categoria);
     this.categoriaSeleccionadaChange.emit(categoria);
   }
