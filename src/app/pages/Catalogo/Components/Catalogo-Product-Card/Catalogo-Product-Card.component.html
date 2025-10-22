@@ -38,7 +38,7 @@
       </span>
     </div>
 
-    <!-- Botones del carrusel -->
+    <!-- Botones del carrusel (visibles siempre en móvil) -->
     @if (hasMultipleImages()) {
       <button
         (click)="prevImage(); $event.stopPropagation()"
@@ -47,7 +47,7 @@
                bg-[#781c2e]/80 hover:bg-[#9b2c3a] text-white rounded-full p-2.5
                transition-all duration-300 backdrop-blur-sm
                active:scale-95 transform shadow-lg
-               opacity-0 group-hover:opacity-100"
+               md:opacity-0 md:group-hover:opacity-100"
         aria-label="Imagen anterior">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
@@ -61,14 +61,14 @@
                bg-[#781c2e]/80 hover:bg-[#9b2c3a] text-white rounded-full p-2.5
                transition-all duration-300 backdrop-blur-sm
                active:scale-95 transform shadow-lg
-               opacity-0 group-hover:opacity-100"
+               md:opacity-0 md:group-hover:opacity-100"
         aria-label="Imagen siguiente">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
         </svg>
       </button>
 
-      <!-- Indicadores (dots) -->
+      <!-- Indicadores (dots) - siempre visibles -->
       <div class="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex gap-2 bg-[#781c2e]/40 px-3 py-2 rounded-full backdrop-blur-sm">
         @for (img of imagenes(); track img; let i = $index) {
           <button
