@@ -1,12 +1,19 @@
-import { ChangeDetectionStrategy, Component, computed, signal, OnInit, effect } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  signal,
+  OnInit,
+  effect,
+  inject
+} from '@angular/core';
 import { Categorias } from '../types/Producto';
 import { CatalogoProductCardComponent } from '../Components/Catalogo-Product-Card/Catalogo-Product-Card.component';
 import { FooterComponent } from '../../../common/Footer/Footer/Footer.component';
 import { CatalogoNavBarComponent } from '../Catalogo-NavBar/Catalogo-NavBar.component';
 import { CatalogoMuralComponent } from '../Catalogo-Mural/Catalogo-Mural.component';
 import { murales } from '../data/Catalogo-Mural';
-import { ProductosService } from '../../../../services/productos.service';
-import { productosSignal } from '../../../../services/productos.service';
+import { ProductosService, productosSignal } from '../../../../services/productos.service';
 
 @Component({
   selector: 'catalogo',
@@ -21,34 +28,27 @@ import { productosSignal } from '../../../../services/productos.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CatalogoComponent implements OnInit {
-  productos = productosSignal;
+  private readonly productosService = inject(ProductosService);
 
-  // Convertir murales a signal si no lo es
-  private muralesData = signal(murales());
-
-  // Signal para categoría seleccionada
-  categoriaSeleccionada = signal<Categorias>('todos');
+  readonly productos = productosSignal;
+  private readonly muralesData = signal(murales());
+  readonly categoriaSeleccionada = signal<Categorias>('todos');
 
   // Computed para productos filtrados
-  productosFiltrados = computed(() => {
+  readonly productosFiltrados = computed(() => {
     const categoria = this.categoriaSeleccionada();
-    let lista = this.productos();
+    const lista = this.productos();
 
-    if (categoria !== 'todos') {
-      lista = lista.filter(p => p.categoria === categoria);
+    if (categoria === 'todos') {
+      return this.ordenarProductos(lista);
     }
 
-    // Ordenar por género: mujer primero, luego hombre, luego sin género
-    return [...lista].sort((a, b) => {
-      if (a.genero === b.genero) return 0;
-      if (!a.genero) return 1;
-      if (!b.genero) return -1;
-      return a.genero === 'mujer' ? -1 : 1;
-    });
+    const filtrados = lista.filter(p => p.categoria === categoria);
+    return this.ordenarProductos(filtrados);
   });
 
-  // Computed que devuelve siempre una nueva referencia del mural
-  muralActual = computed(() => {
+  // FIXED: Computed que siempre retorna un mural único por categoría
+  readonly muralActual = computed(() => {
     const categoria = this.categoriaSeleccionada();
     const listaMurales = this.muralesData();
 
@@ -57,83 +57,81 @@ export class CatalogoComponent implements OnInit {
     if (categoria === 'todos') {
       const mural = listaMurales[0];
       console.log('📸 Mostrando mural TODOS:', mural?.titulo);
-      return { ...mural }; // Nueva referencia
+      // Crear objeto con timestamp único para forzar cambio
+      return {
+        ...mural,
+        _timestamp: Date.now()
+      };
     }
 
     const muralEncontrado = listaMurales.find(m => m.categoria === categoria);
     const muralFinal = muralEncontrado || listaMurales[0];
 
-    console.log('📸 Mostrando mural:', muralFinal?.titulo);
+    console.log('📸 Mostrando mural:', muralFinal?.titulo, '| Categoría:', muralFinal?.categoria);
 
-    return { ...muralFinal }; // Nueva referencia siempre
+    // Crear objeto con timestamp único para forzar cambio
+    return {
+      ...muralFinal,
+      _timestamp: Date.now()
+    };
   });
 
-  // Computed para validar si hay productos
-  tieneProductos = computed(() => this.productosFiltrados().length > 0);
+  readonly tieneProductos = computed(() => this.productosFiltrados().length > 0);
 
-  constructor(private productosService: ProductosService) {
-    // Effect para debugging - detecta cambios de categoría
+  constructor() {
+    // Effect para debugging
     effect(() => {
       const categoria = this.categoriaSeleccionada();
       const mural = this.muralActual();
-      console.log('✅ Cambio detectado - Categoría:', categoria, '| Mural:', mural?.titulo);
+      console.log('✅ Efecto disparado - Categoría:', categoria, '| Mural:', mural?.titulo);
     });
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.productosService.cargarProductos();
     console.log('🚀 Catálogo inicializado');
   }
 
-  // MEJORADO: Método que maneja el cambio de categoría y scroll inteligente
-  onCategoriaSeleccionada(categoria: string | Categorias) {
+  // FIXED: Método mejorado con mejor timing
+  onCategoriaSeleccionada(categoria: string | Categorias): void {
     console.log('🔄 Cambiando a categoría:', categoria);
 
     // Actualizar categoría
     this.categoriaSeleccionada.set(categoria as Categorias);
 
-    // Scroll inteligente según el dispositivo
-    this.scrollToMuralEnMovil();
+    // Esperar a que Angular actualice el DOM antes del scroll
+    setTimeout(() => {
+      this.scrollInteligente();
+    }, 150); // Aumentado a 150ms para dar tiempo al render
   }
 
-  // NUEVO: Scroll mejorado especialmente para móvil
-  private scrollToMuralEnMovil() {
-    // Detectar si es móvil (ancho < 768px)
-    const esMobile = window.innerWidth < 768;
+  private scrollInteligente(): void {
+    const isMobile = window.innerWidth < 768;
+    const targetId = isMobile ? 'mural-section' : 'productos-grid';
+    const element = document.getElementById(targetId);
 
-    setTimeout(() => {
-      if (esMobile) {
-        // En móvil: scroll al mural para ver el cambio
-        const muralElement = document.getElementById('mural-section');
-        if (muralElement) {
-          muralElement.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-          });
-          console.log('📱 Scroll a mural en móvil');
-        }
-      } else {
-        // En desktop: scroll a productos (comportamiento original)
-        const productosElement = document.getElementById('productos-grid');
-        if (productosElement) {
-          productosElement.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-          });
-          console.log('💻 Scroll a productos en desktop');
-        }
-      }
-    }, 100);
+    if (element) {
+      // Offset para sticky navbar
+      const offset = isMobile ? -80 : -100;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset + offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+
+      console.log(`${isMobile ? '📱' : '💻'} Scroll a ${isMobile ? 'mural' : 'productos'}`);
+    }
   }
 
-  // Método original para mantener compatibilidad
-  private scrollToProducts() {
-    setTimeout(() => {
-      const element = document.querySelector('.grid');
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }, 100);
+  private ordenarProductos<T extends { genero?: string }>(productos: T[]): T[] {
+    return [...productos].sort((a, b) => {
+      if (a.genero === b.genero) return 0;
+      if (!a.genero) return 1;
+      if (!b.genero) return -1;
+      return a.genero === 'mujer' ? -1 : 1;
+    });
   }
 
   contarProductos(categoria: Categorias): number {
