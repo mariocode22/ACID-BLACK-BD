@@ -16,7 +16,7 @@ export class CatalogoNavBarComponent {
 
   categoriaActiva = signal<string>('todos');
 
-  categorias = ['todos', 'camisetas', 'gorras', "The lawless west", "crop tops"];
+  categorias = ['todos', 'camisetas', 'gorras', "The lawless west", "crop tops","chaquetas","hoodies"];
 
   seleccionarCategoria(categoria: string) {
     this.categoriaActiva.set(categoria);

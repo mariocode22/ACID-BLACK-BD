@@ -32,5 +32,18 @@ export const murales = signal<Mural[]>([
     texto: 'Comodidad sin perder actitud. Nuestras gorras combinan resistencia y estilo, acompañándote en cada movimiento y en cada mirada desafiante. Diseñadas para durar, pensadas para destacar, cada pieza impone presencia sin pedir permiso. No solo cubres tu cabeza: declaras tu identidad. Estas gorras son para quienes caminan sin miedo, para los que desafían lo común y buscan marcar su camino. Porque en Acid Black, cada accesorio es un arma de estilo y rebeldía.',
     imagen: '/referencias/gorras.jpg',
     categoria: 'gorras'
-  }
+  },
+  {
+    titulo: 'Chaquetas',
+    texto: 'La identidad no pide permiso.Quemaron el manual, traen la costura clásica rockera  , y escupen sobre lo predecible.Diseñadas para quienes no bajan la mirada.Para quienes hacen del caos una estética, y del estilo una forma de resistencia.Acá no hay corrección. Hay filo. Hay peso. Hay postura.Si no incomoda, no sirve',
+    imagen: '/referencias/chaquetas.jpg',
+    categoria: 'chaquetas'
+  },
+
+   {
+    titulo: 'Hoodies',
+    texto: 'La identidad no pide permiso.Quemaron el manual, traen la costura clásica rockera  , y escupen sobre lo predecible.Diseñadas para quienes no bajan la mirada.Para quienes hacen del caos una estética, y del estilo una forma de resistencia.Acá no hay corrección. Hay filo. Hay peso. Hay postura.Si no incomoda, no sirve',
+    imagen: '/modelos/modelo7.jpg',
+    categoria: 'hoodies'
+  },
 ]);

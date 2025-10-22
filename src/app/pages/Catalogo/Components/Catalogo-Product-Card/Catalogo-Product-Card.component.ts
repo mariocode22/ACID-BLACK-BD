@@ -7,16 +7,16 @@ import {
   OnInit,
   OnDestroy,
   inject,
-  computed
+  computed,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'Catalogo-Product-Card',
-  templateUrl: './Catalogo-Product-Card.component.html',
   standalone: true,
   imports: [CommonModule],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  templateUrl: './Catalogo-Product-Card.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CatalogoProductCardComponent implements OnInit, OnDestroy {
   public isVisible = signal(false);
@@ -72,6 +72,7 @@ export class CatalogoProductCardComponent implements OnInit, OnDestroy {
     this.currentImageIndex.set(index);
   }
 
+  // ==== Entradas ====
   @Input() set setImagenes(value: string | string[]) {
     if (Array.isArray(value)) {
       this.imagenes.set(value);
@@ -99,28 +100,32 @@ export class CatalogoProductCardComponent implements OnInit, OnDestroy {
     this.categoria.set(value);
   }
 
+  // ==== Utilidades ====
   get precioFormateado(): string {
     return new Intl.NumberFormat('es-CO', {
       style: 'currency',
       currency: 'COP',
-      minimumFractionDigits: 0
+      minimumFractionDigits: 0,
     }).format(this.precio());
   }
 
+  // ==== Enlace de WhatsApp (string simple) ====
   get whatsappLink(): string {
     const numero = '573006593211';
-    const baseUrl = `https://wa.me/${numero}`;
-    const primeraImagen = this.imagenes()[0];
-
     const mensaje = encodeURIComponent(
-      `Hola, estoy interesado en este producto:\n\n` +
-        `• Nombre: ${this.nombre()}\n` +
-        `• Categoría: ${this.categoria()}\n` +
-        `• Precio: ${this.precioFormateado}` +
-        (this.descripcion() ? `\n• Descripción: ${this.descripcion()}` : '') +
-        (primeraImagen ? `\n\n🔗 Ver imagen: ${primeraImagen}` : '')
+      `👋 ¡Hola! Me interesa:\n\n` +
+      `📦 ${this.nombre()}\n` +
+      `🏷️ ${this.categoria()}\n` +
+      `💰 ${this.precioFormateado}\n\n` +
+      `¿Disponible? 😊`
     );
 
-    return `${baseUrl}?text=${mensaje}`;
+    return `https://wa.me/${numero}?text=${mensaje}`;
+  }
+
+  // ==== Método alternativo con window.open ====
+  abrirWhatsApp(): void {
+    const url = this.whatsappLink;
+    window.open(url, '_blank', 'noopener,noreferrer');
   }
 }

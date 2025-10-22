@@ -1,11 +1,12 @@
 export type Categorias =
   | "gorras"
   | "shorts"
-  | "cowboys"
+  | "hoodies"
   | "camisetas"
   | "The lawless west"
   | "crop tops"
   | "todos"
+  | "cowboys"
   | "chaquetas";
 
 

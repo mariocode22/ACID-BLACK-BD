@@ -40,7 +40,7 @@ export class ProductosService {
   // 🔒 Validaciones internas
   private validarCategoria(categoria: any): Categorias {
     const categoriasValidas: Categorias[] = [
-      "gorras","shorts","cowboys","camisetas","The lawless west","crop tops","todos","chaquetas"
+      "gorras","shorts","cowboys","camisetas","The lawless west","crop tops","todos","chaquetas","hoodies"
     ];
     return categoriasValidas.includes(categoria) ? categoria : "todos";
   }
