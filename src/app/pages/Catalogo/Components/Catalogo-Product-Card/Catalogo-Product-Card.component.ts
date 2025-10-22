@@ -10,6 +10,7 @@ import {
   computed,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'Catalogo-Product-Card',
@@ -29,6 +30,8 @@ export class CatalogoProductCardComponent implements OnInit, OnDestroy {
 
   private observer?: IntersectionObserver;
   private readonly host = inject(ElementRef<HTMLElement>);
+  private readonly router = inject(Router);
+
   hasMultipleImages = computed(() => this.imagenes().length > 1);
 
   ngOnInit(): void {
@@ -109,10 +112,9 @@ export class CatalogoProductCardComponent implements OnInit, OnDestroy {
     }).format(this.precio());
   }
 
-  // ==== Enlace de WhatsApp totalmente funcional ====
+  // ==== WhatsApp ====
   get whatsappLink(): string {
     const numero = '573006593211';
-    const imagen = encodeURIComponent(this.imagenes()[0] || '');
     const mensaje = encodeURIComponent(
       `👋 ¡Hola! Me interesa este producto:\n\n` +
       `📦 *${this.nombre()}*\n` +
@@ -126,5 +128,10 @@ export class CatalogoProductCardComponent implements OnInit, OnDestroy {
 
   abrirWhatsApp(): void {
     window.open(this.whatsappLink, '_blank', 'noopener,noreferrer');
+  }
+
+  // ==== Navegación al catálogo ====
+  irAlCatalogo(): void {
+    this.router.navigate(['/catalogo']); // Cambia la ruta si es otra
   }
 }
