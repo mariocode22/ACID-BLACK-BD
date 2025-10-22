@@ -109,23 +109,22 @@ export class CatalogoProductCardComponent implements OnInit, OnDestroy {
     }).format(this.precio());
   }
 
-  // ==== Enlace de WhatsApp (string simple) ====
+  // ==== Enlace de WhatsApp totalmente funcional ====
   get whatsappLink(): string {
     const numero = '573006593211';
+    const imagen = encodeURIComponent(this.imagenes()[0] || '');
     const mensaje = encodeURIComponent(
-      `👋 ¡Hola! Me interesa:\n\n` +
-      `📦 ${this.nombre()}\n` +
-      `🏷️ ${this.categoria()}\n` +
-      `💰 ${this.precioFormateado}\n\n` +
+      `👋 ¡Hola! Me interesa este producto:\n\n` +
+      `📦 *${this.nombre()}*\n` +
+      `🏷️ Categoría: ${this.categoria()}\n` +
+      `💰 Precio: ${this.precioFormateado}\n\n` +
+      `🖼️ Imagen: ${this.imagenes()[0] || ''}\n\n` +
       `¿Disponible? 😊`
     );
-
-    return `https://wa.me/${numero}?text=${mensaje}`;
+    return `https://api.whatsapp.com/send?phone=${numero}&text=${mensaje}`;
   }
 
-  // ==== Método alternativo con window.open ====
   abrirWhatsApp(): void {
-    const url = this.whatsappLink;
-    window.open(url, '_blank', 'noopener,noreferrer');
+    window.open(this.whatsappLink, '_blank', 'noopener,noreferrer');
   }
 }
