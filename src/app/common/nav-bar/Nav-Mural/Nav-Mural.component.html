@@ -1,20 +1,27 @@
 <section id="INICIO" class="relative w-full h-screen bg-black overflow-hidden">
   <!-- Imagen de fondo -->
   <div class="absolute inset-0">
-    <img src="/top.png" alt="Imagen de fondo principal" class="w-full h-full object-cover" />
+    <img src="/top.png"
+         alt="Imagen de fondo principal"
+         class="w-full h-full object-cover"
+         loading="lazy" />
     <div class="absolute inset-0 bg-gradient-to-b from-black/30 via-black/50 to-black/70"></div>
     <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
   </div>
 
   <!-- Contenido central -->
-  <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-4 sm:px-6 lg:px-8 z-10">
-    <img src="/acidBlack.png" alt="Logo Central"
-      class="w-40 mb-6 drop-shadow-[0_0_15px_rgba(139,0,0,0.6)] transition-all duration-500 hover:scale-105" />
+  <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-6 sm:px-8 lg:px-12 z-10">
+    <img src="/acidBlack.png"
+         alt="Logo Central"
+         class="w-40 mb-6 drop-shadow-[0_0_15px_rgba(139,0,0,0.6)] transition-all duration-500 hover:scale-105"
+         loading="lazy" />
 
-    <a href="https://wa.me/573006593211?text=Hola,%20me%20encuentro%20interesado%20en%20un%20producto%20del%20catálogo."
-      target="_blank" rel="noopener noreferrer">
-      <button class="bg-[#8B0000] hover:bg-[#a80000] text-white font-bold px-6 py-2 rounded-full transition-all duration-300
-               hover:shadow-[0_0_15px_rgba(139,0,0,0.7)] hover:scale-105">
+    <a href="https://wa.me/573006593211"
+       target="_blank"
+       rel="noopener noreferrer"
+       aria-label="Abrir chat de WhatsApp con Acid Black">
+      <button class="bg-[#8B0000] hover:bg-[#a80000] text-white font-bold px-8 py-3 rounded-full transition-all duration-300
+                     hover:shadow-[0_0_15px_rgba(139,0,0,0.7)] hover:scale-105">
         CONTÁCTANOS
       </button>
     </a>
