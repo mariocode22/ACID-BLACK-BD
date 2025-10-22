@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, signal, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, signal, OnInit, effect } from '@angular/core';
 import { Categorias } from '../types/Producto';
 import { CatalogoProductCardComponent } from '../Components/Catalogo-Product-Card/Catalogo-Product-Card.component';
 import { FooterComponent } from '../../../common/Footer/Footer/Footer.component';
@@ -21,11 +21,15 @@ import { productosSignal } from '../../../../services/productos.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CatalogoComponent implements OnInit {
-  productos = productosSignal; // Signal de productos dinámicos
-  murales = murales;
+  productos = productosSignal;
 
+  // Convertir murales a signal si no lo es
+  private muralesData = signal(murales());
+
+  // Signal para categoría seleccionada
   categoriaSeleccionada = signal<Categorias>('todos');
 
+  // Computed para productos filtrados
   productosFiltrados = computed(() => {
     const categoria = this.categoriaSeleccionada();
     let lista = this.productos();
@@ -43,31 +47,92 @@ export class CatalogoComponent implements OnInit {
     });
   });
 
+  // Computed que devuelve siempre una nueva referencia del mural
   muralActual = computed(() => {
     const categoria = this.categoriaSeleccionada();
-    const listaMurales = this.murales();
+    const listaMurales = this.muralesData();
 
-    if (categoria === 'todos') return listaMurales[0];
+    console.log('🎯 Categoría seleccionada:', categoria);
 
-    return listaMurales.find(m => m.categoria === categoria) || listaMurales[0];
+    if (categoria === 'todos') {
+      const mural = listaMurales[0];
+      console.log('📸 Mostrando mural TODOS:', mural?.titulo);
+      return { ...mural }; // Nueva referencia
+    }
+
+    const muralEncontrado = listaMurales.find(m => m.categoria === categoria);
+    const muralFinal = muralEncontrado || listaMurales[0];
+
+    console.log('📸 Mostrando mural:', muralFinal?.titulo);
+
+    return { ...muralFinal }; // Nueva referencia siempre
   });
 
-  constructor(private productosService: ProductosService) {}
+  // Computed para validar si hay productos
+  tieneProductos = computed(() => this.productosFiltrados().length > 0);
+
+  constructor(private productosService: ProductosService) {
+    // Effect para debugging - detecta cambios de categoría
+    effect(() => {
+      const categoria = this.categoriaSeleccionada();
+      const mural = this.muralActual();
+      console.log('✅ Cambio detectado - Categoría:', categoria, '| Mural:', mural?.titulo);
+    });
+  }
 
   ngOnInit() {
-    // Cargar productos desde Supabase al inicializar
     this.productosService.cargarProductos();
+    console.log('🚀 Catálogo inicializado');
   }
 
+  // MEJORADO: Método que maneja el cambio de categoría y scroll inteligente
   onCategoriaSeleccionada(categoria: string | Categorias) {
+    console.log('🔄 Cambiando a categoría:', categoria);
+
+    // Actualizar categoría
     this.categoriaSeleccionada.set(categoria as Categorias);
-    this.scrollToProducts();
+
+    // Scroll inteligente según el dispositivo
+    this.scrollToMuralEnMovil();
   }
 
+  // NUEVO: Scroll mejorado especialmente para móvil
+  private scrollToMuralEnMovil() {
+    // Detectar si es móvil (ancho < 768px)
+    const esMobile = window.innerWidth < 768;
+
+    setTimeout(() => {
+      if (esMobile) {
+        // En móvil: scroll al mural para ver el cambio
+        const muralElement = document.getElementById('mural-section');
+        if (muralElement) {
+          muralElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+          console.log('📱 Scroll a mural en móvil');
+        }
+      } else {
+        // En desktop: scroll a productos (comportamiento original)
+        const productosElement = document.getElementById('productos-grid');
+        if (productosElement) {
+          productosElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+          console.log('💻 Scroll a productos en desktop');
+        }
+      }
+    }, 100);
+  }
+
+  // Método original para mantener compatibilidad
   private scrollToProducts() {
     setTimeout(() => {
       const element = document.querySelector('.grid');
-      if (element) element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }, 100);
   }
 
@@ -75,6 +140,4 @@ export class CatalogoComponent implements OnInit {
     if (categoria === 'todos') return this.productos().length;
     return this.productos().filter(p => p.categoria === categoria).length;
   }
-
-  tieneProductos = computed(() => this.productosFiltrados().length > 0);
 }

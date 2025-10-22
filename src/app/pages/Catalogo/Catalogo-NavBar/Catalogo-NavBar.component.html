@@ -1,12 +1,12 @@
-<nav class="flex flex-wrap justify-center gap-2 mb-8">
+<nav class="flex flex-wrap justify-center gap-3 mb-8">
   @for (categoria of categorias; track categoria) {
     <button
       (click)="seleccionarCategoria(categoria)"
-      class="px-3 py-1.5 rounded-full transition-all duration-300 text-base font-semibold capitalize
+      class="px-6 py-3 rounded-full transition-all duration-300 text-sm font-semibold capitalize
              hover:scale-105 active:scale-95"
       [ngClass]="{
-        'bg-[#781c2e] text-white shadow-[0_2px_8px_rgba(155,44,58,0.3)]': categoriaActiva() === categoria,
-        'text-gray-700 border border-[#9b2c3a] hover:bg-[#9b2c3a]/10': categoriaActiva() !== categoria
+        'bg-[#781c2e] text-white shadow-lg hover:bg-[#9b2c3a] hover:shadow-xl': categoriaActiva() === categoria,
+        'bg-white text-gray-700 border-2 border-gray-200 shadow-sm hover:border-[#781c2e] hover:text-[#781c2e] hover:shadow-md': categoriaActiva() !== categoria
       }">
       {{ categoria }}
     </button>
