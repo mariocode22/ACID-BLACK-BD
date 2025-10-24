@@ -144,12 +144,12 @@ export class CatalogoProductCardComponent implements OnInit, OnDestroy {
       : 'Sin categoría';
 
     const mensaje = encodeURIComponent(
-      `👋 ¡Hola! Me interesa este producto:\n\n` +
+      `¡Hola! Me interesa este producto:\n\n` +
       `📦 *${this.nombre()}*\n` +
       `🏷️ Categorías: ${categoriasTexto}\n` +
       `💰 Precio: ${this.precioFormateado}\n\n` +
       `🖼️ Imagen: ${this.imagenes()[0] || ''}\n\n` +
-      `¿Disponible? 😊`
+      `¿Disponible? `
     );
 
     return `https://api.whatsapp.com/send?phone=${numero}&text=${mensaje}`;
