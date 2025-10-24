@@ -3,6 +3,7 @@ import { signal } from '@angular/core';
 import type { Mural } from '../types/Producto';
 
 export const murales = signal<Mural[]>([
+  // 🔥 IMPORTANTE: "todos" DEBE estar primero
   {
     titulo: 'Nueva colección 666 — Acid Killer',
     texto: 'En la penumbra donde la luz se retira y los susurros son presagios, nace una nueva identidad. No es para los débiles ni para quienes buscan aprobación, sino para los que han visto la oscuridad y la han abrazado. Cada prenda no es solo tela: es un arma afilada, una promesa de caos. Está tejida con los recuerdos de un asesino, con la paciencia sádica de quien espera en silencio y con la frialdad de un bisturí que corta la carne y la mente. Aquí no hay reglas ni límites, solo la pureza del miedo que aterra a los conformistas y a quienes se esconden tras máscaras sociales. Nuestra ropa no busca vestir cuerpos, busca poseer almas.',
@@ -11,7 +12,7 @@ export const murales = signal<Mural[]>([
   },
   {
     titulo: 'Crop Tops',
-    texto: '¿Verte “cute”? Error de concepto. Estas prendas no fueron hechas para adornar, sino para expresar. Nada aquí es dulce ni sumiso: todo tiene filo. Ropa con veneno para mujeres con voz. No te vistas para gustar, vístete para incomodar. Estas piezas no siguen moldes; fueron cortadas con rabia, con ideas y con intención. Son para las que prefieren la crudeza al filtro y la verdad al disfraz. No hay regla que no pueda romperse ni forma que no pueda reinventarse. No hay crop top que te defina mejor que tú misma.',
+    texto: '¿Verte "cute"? Error de concepto. Estas prendas no fueron hechas para adornar, sino para expresar. Nada aquí es dulce ni sumiso: todo tiene filo. Ropa con veneno para mujeres con voz. No te vistas para gustar, vístete para incomodar. Estas piezas no siguen moldes; fueron cortadas con rabia, con ideas y con intención. Son para las que prefieren la crudeza al filtro y la verdad al disfraz. No hay regla que no pueda romperse ni forma que no pueda reinventarse. No hay crop top que te defina mejor que tú misma.',
     imagen: 'https://res.cloudinary.com/djkktgn0g/image/upload/v1761260767/crop-tops_by0n7g.jpg',
     categoria: 'crop tops'
   },
@@ -39,8 +40,7 @@ export const murales = signal<Mural[]>([
     imagen: 'https://res.cloudinary.com/djkktgn0g/image/upload/v1761261380/chaquetas_cwlf3h.jpg',
     categoria: 'chaquetas'
   },
-
-   {
+  {
     titulo: 'Hoodies',
     texto: 'La identidad no pide permiso.Quemaron el manual, traen la costura clásica rockera  , y escupen sobre lo predecible.Diseñadas para quienes no bajan la mirada.Para quienes hacen del caos una estética, y del estilo una forma de resistencia.Acá no hay corrección. Hay filo. Hay peso. Hay postura.Si no incomoda, no sirve',
     imagen: 'https://res.cloudinary.com/djkktgn0g/image/upload/v1761260580/hoodies_a19byk.jpg',

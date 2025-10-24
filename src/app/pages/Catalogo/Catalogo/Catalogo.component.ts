@@ -7,6 +7,7 @@ import {
   effect,
   inject
 } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Categorias } from '../types/Producto';
 import { CatalogoProductCardComponent } from '../Components/Catalogo-Product-Card/Catalogo-Product-Card.component';
 import { FooterComponent } from '../../../common/Footer/Footer/Footer.component';
@@ -29,12 +30,15 @@ import { ProductosService, productosSignal } from '../../../../services/producto
 })
 export class CatalogoComponent implements OnInit {
   private readonly productosService = inject(ProductosService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
 
   readonly productos = productosSignal;
   private readonly muralesData = signal(murales());
+
+  // 🔥 FORZAR inicio en "todos"
   readonly categoriaSeleccionada = signal<Categorias>('todos');
 
-  // 🔥 CAMBIO: Filtrado con array de categorías
   readonly productosFiltrados = computed(() => {
     const categoria = this.categoriaSeleccionada();
     const lista = this.productos();
@@ -43,7 +47,6 @@ export class CatalogoComponent implements OnInit {
       return this.ordenarProductos(lista);
     }
 
-    // ✅ Filtrar productos que CONTENGAN la categoría en su array
     const filtrados = lista.filter(p =>
       p.categorias && p.categorias.includes(categoria)
     );
@@ -51,37 +54,43 @@ export class CatalogoComponent implements OnInit {
     return this.ordenarProductos(filtrados);
   });
 
-  // Computed para el mural actual
   readonly muralActual = computed(() => {
     const categoria = this.categoriaSeleccionada();
     const listaMurales = this.muralesData();
 
     console.log('🎯 Categoría seleccionada:', categoria);
 
+    let muralFinal;
+
+    // 🔥 ASEGURAR que "todos" tome el primer mural
     if (categoria === 'todos') {
-      const mural = listaMurales[0];
-      console.log('📸 Mostrando mural TODOS:', mural?.titulo);
-      return {
-        ...mural,
-        _timestamp: Date.now()
-      };
+      muralFinal = listaMurales[0]; // Siempre el primero
+      console.log('📸 Mostrando mural TODOS (índice 0):', muralFinal?.titulo);
+    } else {
+      const muralEncontrado = listaMurales.find(m => m.categoria === categoria);
+      muralFinal = muralEncontrado || listaMurales[0];
+      console.log('📸 Mostrando mural:', muralFinal?.titulo, '| Categoría:', muralFinal?.categoria);
     }
 
-    const muralEncontrado = listaMurales.find(m => m.categoria === categoria);
-    const muralFinal = muralEncontrado || listaMurales[0];
+    // Validación adicional
+    if (!muralFinal) {
+      console.error('❌ No se encontró mural para:', categoria);
+      muralFinal = listaMurales[0];
+    }
 
-    console.log('📸 Mostrando mural:', muralFinal?.titulo, '| Categoría:', muralFinal?.categoria);
-
+    // Crear un nuevo objeto con timestamp único para forzar re-render
     return {
-      ...muralFinal,
-      _timestamp: Date.now()
+      titulo: muralFinal.titulo,
+      texto: muralFinal.texto,
+      imagen: muralFinal.imagen,
+      categoria: muralFinal.categoria,
+      _timestamp: Date.now() + Math.random()
     };
   });
 
   readonly tieneProductos = computed(() => this.productosFiltrados().length > 0);
 
   constructor() {
-    // Effect para debugging
     effect(() => {
       const categoria = this.categoriaSeleccionada();
       const mural = this.muralActual();
@@ -91,24 +100,54 @@ export class CatalogoComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // 🔥 PASO 1: Cargar productos
     this.productosService.cargarProductos();
-    console.log('🚀 Catálogo inicializado');
+
+    // 🔥 PASO 2: FORZAR categoría "todos" de forma explícita
+    console.log('🚀 INICIANDO catálogo...');
+    console.log('📍 Categoría ANTES:', this.categoriaSeleccionada());
+
+    this.categoriaSeleccionada.set('todos');
+
+    console.log('📍 Categoría DESPUÉS:', this.categoriaSeleccionada());
+    console.log('🎯 Mural actual:', this.muralActual().titulo);
+
+    // 🔥 PASO 3: Limpiar URL
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {},
+      replaceUrl: true
+    });
+
+    // 🔥 PASO 4: Verificar query params SOLO si vienen de navegación externa
+    const subscription = this.route.queryParams.subscribe(params => {
+      const categoria = params['categoria'] as Categorias;
+
+      if (categoria && categoria !== 'todos') {
+        console.log('🔗 Query param detectado:', categoria);
+
+        // Aplicar después de que la página cargue
+        setTimeout(() => {
+          console.log('🔄 Aplicando categoría desde URL:', categoria);
+          this.onCategoriaSeleccionada(categoria);
+        }, 500);
+      }
+
+      // Cancelar suscripción después de primera ejecución
+      subscription.unsubscribe();
+    });
   }
 
-  // Método para cambiar categoría
   onCategoriaSeleccionada(categoria: string | Categorias): void {
     console.log('🔄 Cambiando a categoría:', categoria);
 
-    // Actualizar categoría
     this.categoriaSeleccionada.set(categoria as Categorias);
 
-    // Esperar a que Angular actualice el DOM antes del scroll
     setTimeout(() => {
       this.scrollInteligente();
     }, 150);
   }
 
-  // Scroll inteligente según dispositivo
   private scrollInteligente(): void {
     const isMobile = window.innerWidth < 768;
     const targetId = isMobile ? 'mural-section' : 'productos-grid';
@@ -128,7 +167,6 @@ export class CatalogoComponent implements OnInit {
     }
   }
 
-  // Ordenar productos (mujeres primero)
   private ordenarProductos<T extends { genero?: string }>(productos: T[]): T[] {
     return [...productos].sort((a, b) => {
       if (a.genero === b.genero) return 0;
@@ -138,7 +176,6 @@ export class CatalogoComponent implements OnInit {
     });
   }
 
-  // 🔥 CAMBIO: Contar productos con array de categorías
   contarProductos(categoria: Categorias): number {
     if (categoria === 'todos') return this.productos().length;
 

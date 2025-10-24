@@ -13,7 +13,7 @@ export type Categorias =
 
 export type Genero = "hombre" | "mujer";
 
-// ✅ CAMBIO PRINCIPAL: categorias ahora es un array
+// ✅ Producto con array de categorías
 export interface Producto {
   id: number;
   imagenes: string[]; // Array de URLs (vendrá de la tabla imagenes_producto)
@@ -24,10 +24,11 @@ export interface Producto {
   genero?: Genero;
 }
 
-// Mural sigue igual (una sola categoría por mural)
+// ✅ Mural con timestamp opcional para forzar re-render
 export interface Mural {
   titulo: string;
   texto: string;
   imagen: string;
   categoria: Categorias;
+  _timestamp?: number; // 🔥 Opcional para compatibilidad cross-browser
 }

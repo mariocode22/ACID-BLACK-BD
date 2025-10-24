@@ -1,4 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input, signal, ElementRef, OnInit, OnDestroy, inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { Categorias } from '../../../Catalogo/types/Producto';
 
 @Component({
   selector: 'Inicio-grid-card',
@@ -8,8 +10,6 @@ import { ChangeDetectionStrategy, Component, Input, signal, ElementRef, OnInit, 
 export class InicioGridCardComponent implements OnInit, OnDestroy {
 
   mostrarTexto = signal(false);
-
-  // Signal para la animación de scroll
   isVisible = signal(false);
 
   @Input({ required: true }) nombre!: string;
@@ -17,6 +17,7 @@ export class InicioGridCardComponent implements OnInit, OnDestroy {
 
   private observer?: IntersectionObserver;
   private readonly el = inject(ElementRef);
+  private readonly router = inject(Router);
 
   ngOnInit(): void {
     this.setupScrollAnimation();
@@ -36,11 +37,9 @@ export class InicioGridCardComponent implements OnInit, OnDestroy {
       (entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            // ✅ Cuando entra en vista: mostrar card Y nombre
             this.isVisible.set(true);
             this.mostrarTexto.set(true);
           } else {
-            // ✅ Cuando sale de vista: ocultar card Y nombre
             this.isVisible.set(false);
             this.mostrarTexto.set(false);
           }
@@ -56,6 +55,21 @@ export class InicioGridCardComponent implements OnInit, OnDestroy {
   }
 
   toggleMostrarTexto() {
-    this.mostrarTexto.update(valor => !valor);
+    // Mapear el nombre de la card a la categoría correspondiente
+    const categoriaMap: Record<string, Categorias> = {
+      'THE LAWLESST WEST': 'The lawless west',
+      'CROP TOPS': 'crop tops',
+      'CAMISETAS': 'camisetas',
+      'GORRAS': 'gorras',
+      'HOODIES': 'hoodies',
+      'CHAQUETAS': 'chaquetas'
+    };
+
+    const categoria = categoriaMap[this.nombre] || 'todos';
+
+    // Navegar al catálogo con el parámetro de categoría
+    this.router.navigate(['/catalogo'], {
+      queryParams: { categoria }
+    });
   }
 }
