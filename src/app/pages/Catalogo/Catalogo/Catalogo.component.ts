@@ -39,17 +39,31 @@ export class CatalogoComponent implements OnInit {
   // 🔥 FORZAR inicio en "todos"
   readonly categoriaSeleccionada = signal<Categorias>('todos');
 
+  // 🔥 COMPUTED CORREGIDO: Filtrado mejorado
   readonly productosFiltrados = computed(() => {
     const categoria = this.categoriaSeleccionada();
     const lista = this.productos();
 
+    console.log('🔍 Filtrando productos para categoría:', categoria);
+    console.log('📦 Total productos disponibles:', lista.length);
+
     if (categoria === 'todos') {
+      console.log('✅ Mostrando TODOS los productos:', lista.length);
       return this.ordenarProductos(lista);
     }
 
-    const filtrados = lista.filter(p =>
-      p.categorias && p.categorias.includes(categoria)
-    );
+    // Filtrar productos que contienen la categoría en su array
+    const filtrados = lista.filter(p => {
+      const tieneCategoria = p.categorias && p.categorias.includes(categoria);
+
+      if (tieneCategoria) {
+        console.log(`✓ Producto "${p.nombre}" tiene categoría "${categoria}"`);
+      }
+
+      return tieneCategoria;
+    });
+
+    console.log(`✅ Productos filtrados para "${categoria}":`, filtrados.length);
 
     return this.ordenarProductos(filtrados);
   });
@@ -64,7 +78,7 @@ export class CatalogoComponent implements OnInit {
 
     // 🔥 ASEGURAR que "todos" tome el primer mural
     if (categoria === 'todos') {
-      muralFinal = listaMurales[0]; // Siempre el primero
+      muralFinal = listaMurales[0];
       console.log('📸 Mostrando mural TODOS (índice 0):', muralFinal?.titulo);
     } else {
       const muralEncontrado = listaMurales.find(m => m.categoria === categoria);
@@ -78,7 +92,6 @@ export class CatalogoComponent implements OnInit {
       muralFinal = listaMurales[0];
     }
 
-    // Crear un nuevo objeto con timestamp único para forzar re-render
     return {
       titulo: muralFinal.titulo,
       texto: muralFinal.texto,
@@ -90,12 +103,35 @@ export class CatalogoComponent implements OnInit {
 
   readonly tieneProductos = computed(() => this.productosFiltrados().length > 0);
 
+  // 🔥 COMPUTED para el contador (más eficiente)
+  readonly contadorProductos = computed(() => {
+    const categoria = this.categoriaSeleccionada();
+    const lista = this.productos();
+
+    let total: number;
+
+    if (categoria === 'todos') {
+      total = lista.length;
+    } else {
+      total = lista.filter(p =>
+        p.categorias && p.categorias.includes(categoria)
+      ).length;
+    }
+
+    console.log(`📊 Contador - Categoría: ${categoria} | Total: ${total}`);
+
+    return total;
+  });
+
   constructor() {
     effect(() => {
       const categoria = this.categoriaSeleccionada();
       const mural = this.muralActual();
       const cantidad = this.productosFiltrados().length;
-      console.log(`✅ Categoría: ${categoria} | Productos: ${cantidad} | Mural: ${mural?.titulo}`);
+      console.log(`\n✅ Estado actual:`);
+      console.log(`   Categoría: ${categoria}`);
+      console.log(`   Productos: ${cantidad}`);
+      console.log(`   Mural: ${mural?.titulo}\n`);
     });
   }
 
@@ -104,13 +140,14 @@ export class CatalogoComponent implements OnInit {
     this.productosService.cargarProductos();
 
     // 🔥 PASO 2: FORZAR categoría "todos" de forma explícita
-    console.log('🚀 INICIANDO catálogo...');
-    console.log('📍 Categoría ANTES:', this.categoriaSeleccionada());
+    console.log('\n🚀 INICIANDO catálogo...');
+    console.log('📍 Categoría inicial:', this.categoriaSeleccionada());
 
     this.categoriaSeleccionada.set('todos');
 
-    console.log('📍 Categoría DESPUÉS:', this.categoriaSeleccionada());
-    console.log('🎯 Mural actual:', this.muralActual().titulo);
+    console.log('📍 Categoría forzada a:', this.categoriaSeleccionada());
+    console.log('🎯 Mural inicial:', this.muralActual().titulo);
+    console.log('📦 Productos cargados:', this.productos().length);
 
     // 🔥 PASO 3: Limpiar URL
     this.router.navigate([], {
@@ -126,20 +163,20 @@ export class CatalogoComponent implements OnInit {
       if (categoria && categoria !== 'todos') {
         console.log('🔗 Query param detectado:', categoria);
 
-        // Aplicar después de que la página cargue
         setTimeout(() => {
           console.log('🔄 Aplicando categoría desde URL:', categoria);
           this.onCategoriaSeleccionada(categoria);
         }, 500);
       }
 
-      // Cancelar suscripción después de primera ejecución
       subscription.unsubscribe();
     });
   }
 
   onCategoriaSeleccionada(categoria: string | Categorias): void {
-    console.log('🔄 Cambiando a categoría:', categoria);
+    console.log('\n🔄 Cambiando categoría...');
+    console.log('   De:', this.categoriaSeleccionada());
+    console.log('   A:', categoria);
 
     this.categoriaSeleccionada.set(categoria as Categorias);
 
@@ -176,11 +213,49 @@ export class CatalogoComponent implements OnInit {
     });
   }
 
+  // 🔥 MÉTODO MEJORADO: Contar productos por categoría
   contarProductos(categoria: Categorias): number {
-    if (categoria === 'todos') return this.productos().length;
+    const lista = this.productos();
 
-    return this.productos().filter(p =>
+    if (categoria === 'todos') {
+      console.log(`📊 Contando TODOS: ${lista.length}`);
+      return lista.length;
+    }
+
+    const count = lista.filter(p =>
       p.categorias && p.categorias.includes(categoria)
     ).length;
+
+    console.log(`📊 Contando "${categoria}": ${count}`);
+    return count;
+  }
+
+  // 🔥 NUEVO: Método para debugging
+  debugProductos(): void {
+    console.log('\n🔍 DEBUG DE PRODUCTOS:');
+    console.log('═══════════════════════════════════════');
+
+    const productos = this.productos();
+    console.log(`📦 Total productos: ${productos.length}\n`);
+
+    // Contar por cada categoría
+    const categorias: Categorias[] = [
+      'todos', 'camisetas', 'gorras', 'The lawless west',
+      'crop tops', 'chaquetas', 'conjuntos', 'nuevo',
+      'prendas inferiores', 'hoodies'
+    ];
+
+    categorias.forEach(cat => {
+      const count = this.contarProductos(cat);
+      console.log(`   ${cat.padEnd(20)}: ${count} productos`);
+    });
+
+    console.log('\n📋 Detalle por producto:');
+    productos.forEach((p, index) => {
+      console.log(`   ${(index + 1).toString().padStart(2)}. ${p.nombre}`);
+      console.log(`       Categorías: [${p.categorias?.join(', ') || 'ninguna'}]`);
+    });
+
+    console.log('═══════════════════════════════════════\n');
   }
 }

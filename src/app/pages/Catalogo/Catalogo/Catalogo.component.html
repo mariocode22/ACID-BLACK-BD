@@ -12,22 +12,20 @@
   <section class="flex flex-col items-center py-10 px-6 sm:py-12 sm:px-6 lg:px-8 bg-gray-200">
     <div class="w-full max-w-7xl">
 
-      <!-- Título con contador de productos -->
+      <!-- Título con contador de productos MEJORADO -->
       <div class="text-center mb-8">
         <h1 class="text-2xl sm:text-4xl font-bold text-gray-900 mb-2 tracking-tight">
           Nuestro Catálogo
         </h1>
-        @if (categoriaSeleccionada() !== 'todos') {
         <p class="text-sm text-gray-600">
-          {{ productosFiltrados().length }}
-          {{ productosFiltrados().length === 1 ? 'producto' : 'productos' }}
-          en <span class="font-semibold capitalize">{{ categoriaSeleccionada() }}</span>
+          <span class="font-bold text-[#781c2e] text-lg">{{ contadorProductos() }}</span>
+          {{ contadorProductos() === 1 ? 'producto' : 'productos' }}
+          @if (categoriaSeleccionada() !== 'todos') {
+            en <span class="font-semibold capitalize">{{ categoriaSeleccionada() }}</span>
+          } @else {
+            disponibles
+          }
         </p>
-        } @else {
-        <p class="text-sm text-gray-600">
-          {{ productos().length }} productos disponibles
-        </p>
-        }
       </div>
 
       <!-- Navbar de categorías - STICKY con sincronización -->
