@@ -5,9 +5,9 @@ import type { Mural } from '../types/Producto';
 export const murales = signal<Mural[]>([
   // 🔥 IMPORTANTE: "todos" DEBE estar primero
   {
-    titulo: 'Nueva colección 666 — Acid Killer',
-    texto: 'En la penumbra donde la luz se retira y los susurros son presagios, nace una nueva identidad. No es para los débiles ni para quienes buscan aprobación, sino para los que han visto la oscuridad y la han abrazado. Cada prenda no es solo tela: es un arma afilada, una promesa de caos. Está tejida con los recuerdos de un asesino, con la paciencia sádica de quien espera en silencio y con la frialdad de un bisturí que corta la carne y la mente. Aquí no hay reglas ni límites, solo la pureza del miedo que aterra a los conformistas y a quienes se esconden tras máscaras sociales. Nuestra ropa no busca vestir cuerpos, busca poseer almas.',
-    imagen: 'https://res.cloudinary.com/djkktgn0g/image/upload/v1761261475/nuevo_cfdtxq.jpg',
+    titulo: 'Nueva colección Black Liturgy',
+    texto: 'Donde la luz muere y los susurros se vuelven profecía, emerge lo que no pide permiso. Esta colección no es para quien busca encajar, sino para quien ya conoce el sabor del abismo y lo prefiere a la tibieza. Cada pieza es un ritual, un pacto silencioso con tu verdad más oscura. No vestimos cuerpos: marcamos territorios. Tejidas con la paciencia del depredador nocturno y la precisión del que nunca falla, estas prendas cortan más profundo que el tejido social. Aquí no hay redención ni salvación, solo la certeza de quien ya no teme a su propia sombra. Black Liturgy no es moda, es el sermón de los que renunciaron al cielo.',
+    imagen: 'https://res.cloudinary.com/djkktgn0g/image/upload/v1769630212/deity3_qpz4ez.jpg',
     categoria: 'todos'
   },
   {
