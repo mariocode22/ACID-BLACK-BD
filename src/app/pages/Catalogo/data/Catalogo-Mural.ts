@@ -7,7 +7,7 @@ export const murales = signal<Mural[]>([
   {
     titulo: 'Nueva colección Black Liturgy',
     texto: 'Donde la luz muere y los susurros se vuelven profecía, emerge lo que no pide permiso. Esta colección no es para quien busca encajar, sino para quien ya conoce el sabor del abismo y lo prefiere a la tibieza. Cada pieza es un ritual, un pacto silencioso con tu verdad más oscura. No vestimos cuerpos: marcamos territorios. Tejidas con la paciencia del depredador nocturno y la precisión del que nunca falla, estas prendas cortan más profundo que el tejido social. Aquí no hay redención ni salvación, solo la certeza de quien ya no teme a su propia sombra. Black Liturgy no es moda, es el sermón de los que renunciaron al cielo.',
-    imagen: 'https://res.cloudinary.com/djkktgn0g/image/upload/v1769630212/deity3_qpz4ez.jpg',
+    imagen: 'https://res.cloudinary.com/djkktgn0g/image/upload/v1769834241/banner_l5thd3.jpg',
     categoria: 'todos'
   },
   {
